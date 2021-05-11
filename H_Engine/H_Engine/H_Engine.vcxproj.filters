@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Ninjarun">
+      <UniqueIdentifier>{e687b215-e522-4815-86a4-b3f700647c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ninja jump">
+      <UniqueIdentifier>{9b43fd29-0f20-458e-a067-0a8918b1af3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameError.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Deninja.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="winmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Deninja.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="flying-saucer-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-14.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-15.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-17.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-18.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flying-saucer-19.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="png\BG.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__000.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__001.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__002.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__003.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__004.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__005.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__006.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__007.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__008.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="png\Ninjarun\Run__009.png">
+      <Filter>Resource Files\Ninjarun</Filter>
+    </Image>
+    <Image Include="Idle__000.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Jump__000.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__001.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__002.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__003.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__004.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__005.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__006.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__007.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__008.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+    <Image Include="Jump__009.png">
+      <Filter>Resource Files\ninja jump</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

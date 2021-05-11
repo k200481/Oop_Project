@@ -1,0 +1,5 @@
+﻿  Deninja.cpp
+C:\Users\USER\Desktop\The Engine\H_Engine\H_Engine\Deninja.cpp(155,33): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\USER\Desktop\The Engine\H_Engine\H_Engine\Deninja.cpp(162,42): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\USER\Desktop\The Engine\H_Engine\H_Engine\Deninja.cpp(169,43): warning C4305: 'argument': truncation from 'double' to 'float'
+  H_Engine.vcxproj -> C:\Users\USER\Desktop\The Engine\H_Engine\Debug\H_Engine.exe
