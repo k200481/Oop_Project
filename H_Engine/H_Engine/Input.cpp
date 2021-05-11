@@ -17,7 +17,7 @@ Input::Input()
 }Input::~Input()
 {
     if(mouseCaptured)
-        ReleaseCapture();               // release mouse
+        ReleaseCapture();           
 }
 void Input::initialize(HWND hwnd, bool capture)
 {
