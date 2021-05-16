@@ -41,7 +41,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Ninja.cpp" />
     <ClCompile Include="textureManager.cpp" />
-    <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
