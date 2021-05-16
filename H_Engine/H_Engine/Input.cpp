@@ -94,7 +94,8 @@ void Input::clearKeyPress(UCHAR vkey)
 {
     if (vkey < inputNS::KEYS_ARRAY_LEN)
         keysPressed[vkey] = false;
-}void Input::clear(UCHAR what)
+}
+void Input::clear(UCHAR what)
 {
     if(what & inputNS::KEYS_DOWN)  {
         for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
@@ -117,7 +118,8 @@ void Input::mouseIn(LPARAM lParam)
 {
     mouseX = GET_X_LPARAM(lParam); 
     mouseY = GET_Y_LPARAM(lParam);
-}void Input::mouseRawIn(LPARAM lParam)
+}
+void Input::mouseRawIn(LPARAM lParam)
 {
     UINT dwSize = 40;
     static BYTE lpb[40];
