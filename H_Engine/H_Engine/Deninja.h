@@ -4,12 +4,14 @@
 #include"image.h"
 #include"textureManager.h"
 
+#include "Ninja.h"
 #include "Bullet.h"
 
 class Deninja :public Game
 {
 private:
     Bullet* b = NULL;
+    Ninja* n = NULL;
     
     TextureManager Bgmanager;
 	Image Bg;

@@ -38,7 +38,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
                 game->run(hwnd);
         }
         SAFE_DELETE (game);
-        return msg.wParam;
+        return int(msg.wParam);
     }
     catch(...)
     {
