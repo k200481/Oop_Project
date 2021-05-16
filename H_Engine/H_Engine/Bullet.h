@@ -6,68 +6,24 @@
 class Bullet
 {
 public:
-	static void InitBulletAnimation(Graphics* graphics) {
-		// initialize the texture manager
-		if (!texManager.initialize(graphics, file)) {
-			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
-		}
-		// initialize basic info for the bullet img
-		img.initialize(graphics, 0, 0, 0, &texManager);
-		img.setDegrees(270.0f);
-		img.setScale(1.0f);
-
-		animationsInitialized = true;
-	}
-
-	Bullet(float center_x, float center_y) 
-		:
-		x(center_x),
-		y(center_y)
-	{
-		if (!animationsInitialized) {
-			throw(GameError(gameErrorNS::FATAL_ERROR, "Bullet image not initialized"));
-		}
-	}
-
-	void UpdatePosition(float delta_x, float delta_y) {
-		// update x and y
-		x += delta_x;
-		y += delta_y;	
-
-		// will automatically be destroyed on reaching game height
-		if (y >= GAME_HEIGHT) {
-			isDestroyed = true;
-		}
-	}
-
-	float GetX() {
-		return x;
-	}
-	float GetY() {
-		return y;
-	}
-
-	void BulletDestroyed() {
-		isDestroyed = true;
-	}
-	bool IsDestroyed() {
-		return isDestroyed;
-	}
-
-	void Draw() {
-		// make sure bullet isn't already destroyed
-		if (!IsDestroyed()) {
-			// update the x and y of image before rendering
-			img.setX(x);
-			img.setY(y);
-			// draw
-			img.draw();
-		}
-	}
+	// load bullet image into program
+	static void InitBulletAnimation(Graphics* graphics);
+	//constructor
+	Bullet(float center_x, float center_y);
+	void UpdatePosition(float delta_x, float delta_y);
+	// position getters
+	float GetX();
+	float GetY();
+	// used to destroy bullet
+	void BulletDestroyed();
+	// returns true if bullet has been destroyed
+	bool IsDestroyed();
+	// draws bullet depending on its position
+	void Draw();
 
 private:
+	// used to make sure if the bullet image has been loaded before anything is one with bullet
 	static bool animationsInitialized;
-	
 	// center of the bulet
 	float x;
 	float y;
