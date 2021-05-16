@@ -3,20 +3,22 @@
 #include"game.h"
 #include"image.h"
 #include"textureManager.h"
+
+#include "Bullet.h"
+
 class Deninja :public Game
 {
 private:
-	TextureManager Bgmanager;
+    Bullet* b = NULL;
+    
+    TextureManager Bgmanager;
 	Image Bg;
-    TextureManager Bulletmanager;
-    Image *bullet;
     TextureManager ship1Texture;
     TextureManager ship2Texture;
     TextureManager ship3Texture;
     TextureManager ship4Texture;
     TextureManager ship5Texture;
     Image ship[5];
-    bool bul = false;
     float shipx;
     float shipy;
     int one;

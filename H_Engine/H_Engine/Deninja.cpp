@@ -3,9 +3,18 @@ Deninja::Deninja(){}
 Deninja::~Deninja() {}
 void Deninja::initialize(HWND hwnd) {
 	Game::initialize(hwnd);
+
+    Bullet::InitBulletAnimation(graphics);
+
     Bgmanager.initialize(graphics, L"BG.png");
+    
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
-    Bulletmanager.initialize(graphics, L"bullet.png");
+    
+    if (!ship[0].initialize(graphics, 0, 0, 0, &ship5Texture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
+    ship1Texture.initialize(graphics, L"flying-saucer-1.png");
+    if (!ship[1].initialize(graphics, 0, 0, 0, &ship1Texture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
     ship2Texture.initialize(graphics, L"flying-saucer-2.png");
     if (!ship[2].initialize(graphics, 0, 0, 0, &ship2Texture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
@@ -16,11 +25,8 @@ void Deninja::initialize(HWND hwnd) {
     if (!ship[4].initialize(graphics, 0, 0, 0, &ship4Texture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
     ship5Texture.initialize(graphics, L"flying-saucer-5.png");
-    if (!ship[0].initialize(graphics, 0, 0, 0, &ship5Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship1Texture.initialize(graphics, L"flying-saucer-1.png");
-    if (!ship[1].initialize(graphics, 0, 0, 0, &ship1Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
+    
+    
     runmanager[0].initialize(graphics, L"Run__000.png");
     runi[0].initialize(graphics, 0, 0, 0, &runmanager[0]);
     runmanager[1].initialize(graphics, L"Run__001.png");
@@ -47,26 +53,24 @@ void Deninja::initialize(HWND hwnd) {
 }
 void Deninja::update() {
     one = (one <= 3) ? one + 1 : 0;
-    if (!bul)
-        bul = true;
-    if (bul) {
-        if (bullet == NULL) {
-            bullet = new Image;
-            bullet->initialize(graphics, 0, 0, 0, &Bulletmanager);
-            bullet->setX(ship[one].getCenterX());
-            bullet->setY(ship[one].getY());
-            bullet->setDegrees(270);
-            bullet->setScale(1);
-        }
-        bullet->setY(bullet->getY() + 10);
-        if (bullet->getCenterY() >= GAME_HEIGHT) {
-            bullet->~Image();
-            bul = false;
-            delete bullet;
-            bullet = NULL;
-            score = score + 100;
+    
+    if (b == NULL) {
+        // create a new bullet if there is none
+        b = new Bullet(ship[one].getCenterX(), ship[one].getCenterY());
+    }
+    else {
+        // update the bullet's current position
+        b->UpdatePosition(0.0f, 10.0f);
+        // check if the new position caused the bullet to reach game height and get destroyed
+        if (b->IsDestroyed()) {
+            delete b;
+            b = NULL;
+
+            // update score
+            score += 100;
         }
     }
+
     if (!shipdir)
         if (ship[one].getX() < GAME_WIDTH - ship[one].getWidth()-20)
             shipx = shipx + 10;
@@ -111,16 +115,24 @@ void Deninja::update() {
 }
 void Deninja::ai(){}
 void Deninja::collisions(){
-    if (bullet)
-        if (bullet->getCenterX() >= runi[runt].getCenterX()-30 &&
-            bullet->getCenterX() <= runi[runt].getCenterX() +30
-            && bullet->getY() <= runi[runt].getY() + 100
-            && bullet->getY() >= runi[runt].getY() - 100) {
+    if (b != NULL) {
+        const float bulletCenterX = b->GetX();
+        const float bulletCenterY = b->GetY();
+
+        const float playerLeft = runi[runt].getCenterX() - 30;
+        const float playerRight = runi[runt].getCenterX() + 30;
+        const float playerTop = runi[runt].getY() - 100;
+        const float playerBottom = runi[runt].getY() + 100;
+
+        if ( bulletCenterX >= playerLeft && bulletCenterX <= playerRight
+            && bulletCenterY >= playerTop && bulletCenterY <= playerBottom )
+        {
             wchar_t buffer[256];
             wsprintfW(buffer, L"Your Score is %d", score);
             MessageBox(NULL, L"You lost", buffer, MB_ICONERROR);
             PostQuitMessage(1);
         }
+    }
 }
 void Deninja::releaseAll()
 {
@@ -143,32 +155,37 @@ void Deninja::resetAll()
 void Deninja::render()
 {
     graphics->spriteBegin();
+    
     Bg.draw();
-    if(bullet)
-    bullet->draw();
+
+    if ( b != NULL ) {
+        b->Draw();
+    }
+
     ship[one].setScale(2);
     ship[one].draw();
-        if (forward == 0 && backward == 0) {
-            runi[10].flipHorizontal(direction);
-            runi[10].setX(ninx);
-            runi[10].setY(niny);
-            runi[10].setScale(.2);
-            runi[10].draw();
-        }
-        else if (forward != 0) {
-            runi[forward - 1].setX(ninx);
-            runi[forward - 1].setY(niny);
-            runi[forward - 1].flipHorizontal(false);
-            runi[forward - 1].setScale(.2);
-            runi[forward - 1].draw();
-        }
-        else {
-            runi[backward - 1].setX(ninx);
-            runi[backward - 1].setY(niny);
-            runi[backward - 1].flipHorizontal(true);
-            runi[backward - 1].setScale(.2);
-            runi[backward - 1].draw();
-        }
-    
+
+    if (forward == 0 && backward == 0) {
+        runi[10].flipHorizontal(direction);
+        runi[10].setX(ninx);
+        runi[10].setY(niny);
+        runi[10].setScale(.2);
+        runi[10].draw();
+    }
+    else if (forward != 0) {
+        runi[forward - 1].setX(ninx);
+        runi[forward - 1].setY(niny);
+        runi[forward - 1].flipHorizontal(false);
+        runi[forward - 1].setScale(.2);
+        runi[forward - 1].draw();
+    }
+    else {
+        runi[backward - 1].setX(ninx);
+        runi[backward - 1].setY(niny);
+        runi[backward - 1].flipHorizontal(true);
+        runi[backward - 1].setScale(.2);
+        runi[backward - 1].draw();
+    }
+
     graphics->spriteEnd();
 }

@@ -29,8 +29,8 @@ Image::Image(){
 }
 
 Image::~Image()
-{}bool Image::initialize(Graphics *g, int width, int height, int ncols,
-                       TextureManager *textureM)
+{}
+bool Image::initialize(Graphics *g, int width, int height, int ncols, TextureManager *textureM)
 {
     try{
         graphics = g;                           
