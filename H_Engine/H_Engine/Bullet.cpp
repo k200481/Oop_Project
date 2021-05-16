@@ -18,40 +18,42 @@ void Bullet::InitBulletAnimation(Graphics* graphics) {
 	animationsInitialized = true;
 }
 
-Bullet::Bullet(float center_x, float center_y)
+Bullet::Bullet(const Vec2<float>& position)
 	:
-	x(center_x),
-	y(center_y)
+	position(position)
 {
 	if (!animationsInitialized) {
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Bullet image not initialized"));
 	}
 }
 
-void Bullet::UpdatePosition(float delta_x, float delta_y) {
-	// update x and y
-	x += delta_x;
-	y += delta_y;
+void Bullet::UpdatePosition(const Vec2<float>& velocity) {
+	// update position
+	position += velocity;
 
 	// will automatically be destroyed on reaching game height
-	if (y >= GAME_HEIGHT) {
+	if (int(position.y) >= GAME_HEIGHT) {
 		isDestroyed = true;
 	}
 }
 
-float Bullet::GetX() {
-	return x;
+float Bullet::GetX() const {
+	return position.x;
 }
 
-float Bullet::GetY() {
-	return y;
+float Bullet::GetY() const {
+	return position.y;
+}
+
+Vec2<float> Bullet::GetPosition() const {
+	return position;
 }
 
 void Bullet::BulletDestroyed() {
 	isDestroyed = true;
 }
 
-bool Bullet::IsDestroyed() {
+bool Bullet::IsDestroyed() const {
 	return isDestroyed;
 }
 
@@ -59,8 +61,8 @@ void Bullet::Draw() {
 	// make sure bullet isn't already destroyed
 	if (!IsDestroyed()) {
 		// update the x and y of image before rendering
-		img.setX(x);
-		img.setY(y);
+		img.setX(position.x);
+		img.setY(position.y);
 		// draw
 		img.draw();
 	}

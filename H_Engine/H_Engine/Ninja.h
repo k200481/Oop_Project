@@ -1,6 +1,8 @@
 #pragma once
 #include "textureManager.h"
 #include "image.h"
+
+#include "Vec2.h"
 #include <vector>
 
 class Ninja
@@ -12,27 +14,27 @@ private:
 	};
 
 public:
-	// constructor
+	// constructors
 	Ninja(float initial_x, float initial_y, Graphics* graphics);
+	Ninja(const Vec2<float>& initial_position, Graphics* graphics);
 	// update position of ninja
-	void Update(float delta_x, float delta_y);
+	void Update(const Vec2<float>& velocity);
+	// get position
+	Vec2<float> GetPosition() const;
+	// draw sprite
+	void Draw();
+private:
+	// a truly horrible, list of initializations
+	void InitializeTextures(Graphics* graphics);
 	// move to the next frame (while skipping the idle frame)
 	void AdvanceFrame();
 	// updata sprite direction
 	void UpdateImage();
-	// draw sprite
-	void Draw() {
-		image[currentFrame].draw();
-	}
-private:
-	// a truly horrible, list of initializations
-	void InitializeTextures(Graphics* graphics);
 private:
 	// position and direction
-	float x;
-	float y;
+	Vec2<float> position;
 	Direction direction = Direction::Right;
-
+	// width and height of the sprite
 	float width;
 	float height;
 

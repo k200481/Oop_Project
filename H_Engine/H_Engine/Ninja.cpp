@@ -1,44 +1,45 @@
 #include "Ninja.h"
 
-
-
 Ninja::Ninja(float initial_x, float initial_y, Graphics* graphics)
 	:
-	x(initial_x),
-	y(initial_y)
+	Ninja(Vec2<float>(initial_x, initial_y), graphics)
+{
+}
+
+Ninja::Ninja(const Vec2<float>& initial_position, Graphics* graphics)
+	:
+	position(initial_position)
 {
 	// initialize all the runs frames
-	wchar_t str[] = L"Run__000.png";
 	for (int i = 0; i <= runFrameCount; i++) {
-		str[7] = '0' + i;
 		texManager.emplace_back();
 	}
 
+	// initialize all the frames in the animation, gonna make a frame class to deal with this later, probably
+	// initialize textures
 	InitializeTextures(graphics);
-
 	// initialize images
 	for (int i = 0; i <= runFrameCount; i++) {
 		image.emplace_back();
 		image[i].initialize(graphics, 0, 0, 0, &texManager[i]);
 		image[i].setScale(imageScale);
 	}
-
+	// get width and height of sprite (assume all sprites have the same dimensions... which they should)
 	width = image[0].getWidth() * imageScale;
 	height = image[0].getHeight() * imageScale;
 }
 
-void Ninja::Update(float delta_x, float delta_y)
+void Ninja::Update(const Vec2<float>& velocity)
 {
 	// update position
-	x += delta_x;
-	y += delta_y;
+	position += velocity;
 
-	if (delta_x == 0.0f) {
-		currentFrame = 10;
+	if (velocity.x == 0.0f) {
+		currentFrame = idleFrameIndex;
 	}
 	else {
 		// turn ninja in the correct direction
-		if (delta_x > 0) { // moving right
+		if (velocity.x > 0) { // moving right
 			direction = Direction::Right;
 		}
 		else {			   // moving left
@@ -49,6 +50,16 @@ void Ninja::Update(float delta_x, float delta_y)
 	}
 	// update the image
 	UpdateImage();
+}
+
+Vec2<float> Ninja::GetPosition() const
+{
+	return position;
+}
+
+void Ninja::Draw()
+{
+	image[currentFrame].draw();
 }
 
 void Ninja::AdvanceFrame()
@@ -76,8 +87,8 @@ void Ninja::UpdateImage()
 		image[currentFrame].flipHorizontal(true);
 	}
 
-	image[currentFrame].setX(x);
-	image[currentFrame].setY(y);
+	image[currentFrame].setX(position.x);
+	image[currentFrame].setY(position.y);
 }
 
 void Ninja::InitializeTextures(Graphics* graphics) {

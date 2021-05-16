@@ -4,6 +4,8 @@
 #include"image.h"
 #include"textureManager.h"
 
+
+#include "Vec2.h"
 #include "Ninja.h"
 #include "Bullet.h"
 
