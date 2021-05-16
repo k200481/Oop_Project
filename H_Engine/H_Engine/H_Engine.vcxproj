@@ -27,6 +27,7 @@
     <ClInclude Include="graphics.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Ninja.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -37,6 +38,7 @@
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Ninja.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="winmain.cpp" />

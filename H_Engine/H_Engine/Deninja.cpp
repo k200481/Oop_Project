@@ -1,6 +1,9 @@
 #include "Deninja.h"
 Deninja::Deninja(){}
-Deninja::~Deninja() {}
+Deninja::~Deninja() {
+    SAFE_DELETE(b);
+    SAFE_DELETE(n);
+}
 void Deninja::initialize(HWND hwnd) {
 	Game::initialize(hwnd);
 
@@ -27,7 +30,9 @@ void Deninja::initialize(HWND hwnd) {
     ship5Texture.initialize(graphics, L"flying-saucer-5.png");
     
     
-    runmanager[0].initialize(graphics, L"Run__000.png");
+    n = new Ninja(0.0f, 800.0f, graphics);
+
+    /*runmanager[0].initialize(graphics, L"Run__000.png");
     runi[0].initialize(graphics, 0, 0, 0, &runmanager[0]);
     runmanager[1].initialize(graphics, L"Run__001.png");
     runi[1].initialize(graphics, 0, 0, 0, &runmanager[1]);
@@ -49,7 +54,7 @@ void Deninja::initialize(HWND hwnd) {
     runi[9].initialize(graphics, 0, 0, 0, &runmanager[9]);
     runmanager[10].initialize(graphics, L"Idle__000.png");
     runi[10].initialize(graphics, 0, 0, 0, &runmanager[10]);
-    runt = 0;
+    runt = 0;*/
 }
 void Deninja::update() {
     one = (one <= 3) ? one + 1 : 0;
@@ -82,34 +87,44 @@ void Deninja::update() {
     else
         shipdir = !shipdir;
     ship[one].setX(shipx);
-    if (!input->isKeyDown('D')) {
-        forward = 0;
-    }
-    if (!input->isKeyDown('A')) {
-        backward = 0;
-    }
-    if (input->isKeyDown('D')) {
-        if (forward == 10)
-            forward=1;
-        else
-            forward++;
-        direction = false;
-        if(ninx<(GAME_WIDTH-60))
-        ninx=ninx+3;
-    }
+    //if (!input->isKeyDown('D')) {
+    //    forward = 0;
+    //}
+    //if (!input->isKeyDown('A')) {
+    //    backward = 0;
+    //}
+    //if (input->isKeyDown('D')) {
+    //    if (forward == 10)
+    //        forward=1;
+    //    else
+    //        forward++;
+    //    direction = false;
+    //    if(ninx<(GAME_WIDTH-60))
+    //    ninx=ninx+3;
+    //}
+    //if (input->isKeyDown('A')) {
+    //    if (backward == 10)
+    //        backward = 1;
+    //    else
+    //        backward++;
+    //    direction = true;
+    //    if (ninx >0)
+    //    ninx = ninx - 3;
+    //}
+    //if (input->isKeyDown('W')) {
+    //}
+    //if (input->isKeyDown('S')) {
+    //}
+    float delta_x = 0.0f;
+    float delta_y = 0.0f;
     if (input->isKeyDown('A')) {
-        if (backward == 10)
-            backward = 1;
-        else
-            backward++;
-        direction = true;
-        if (ninx >0)
-        ninx = ninx - 3;
+        delta_x = -1.0f;
     }
-    if (input->isKeyDown('W')) {
+    else if (input->isKeyDown('D')) {
+        delta_x = +1.0f;
     }
-    if (input->isKeyDown('S')) {
-    }
+
+    n->Update(delta_x, delta_y);
     Deninja::render();
 
 }
@@ -124,14 +139,14 @@ void Deninja::collisions(){
         const float playerTop = runi[runt].getY() - 100;
         const float playerBottom = runi[runt].getY() + 100;
 
-        if ( bulletCenterX >= playerLeft && bulletCenterX <= playerRight
-            && bulletCenterY >= playerTop && bulletCenterY <= playerBottom )
-        {
-            wchar_t buffer[256];
-            wsprintfW(buffer, L"Your Score is %d", score);
-            MessageBox(NULL, L"You lost", buffer, MB_ICONERROR);
-            PostQuitMessage(1);
-        }
+        //if ( bulletCenterX >= playerLeft && bulletCenterX <= playerRight
+        //    && bulletCenterY >= playerTop && bulletCenterY <= playerBottom )
+        //{
+        //    wchar_t buffer[256];
+        //    wsprintfW(buffer, L"Your Score is %d", score);
+        //    MessageBox(NULL, L"You lost", buffer, MB_ICONERROR);
+        //    PostQuitMessage(1);
+        //}
     }
 }
 void Deninja::releaseAll()
@@ -165,27 +180,29 @@ void Deninja::render()
     ship[one].setScale(2);
     ship[one].draw();
 
-    if (forward == 0 && backward == 0) {
-        runi[10].flipHorizontal(direction);
-        runi[10].setX(ninx);
-        runi[10].setY(niny);
-        runi[10].setScale(.2);
-        runi[10].draw();
-    }
-    else if (forward != 0) {
-        runi[forward - 1].setX(ninx);
-        runi[forward - 1].setY(niny);
-        runi[forward - 1].flipHorizontal(false);
-        runi[forward - 1].setScale(.2);
-        runi[forward - 1].draw();
-    }
-    else {
-        runi[backward - 1].setX(ninx);
-        runi[backward - 1].setY(niny);
-        runi[backward - 1].flipHorizontal(true);
-        runi[backward - 1].setScale(.2);
-        runi[backward - 1].draw();
-    }
+    //if (forward == 0 && backward == 0) {
+    //    runi[10].flipHorizontal(direction);
+    //    runi[10].setX(ninx);
+    //    runi[10].setY(niny);
+    //    runi[10].setScale(.2);
+    //    runi[10].draw();
+    //}
+    //else if (forward != 0) {
+    //    runi[forward - 1].setX(ninx);
+    //    runi[forward - 1].setY(niny);
+    //    runi[forward - 1].flipHorizontal(false);
+    //    runi[forward - 1].setScale(.2);
+    //    runi[forward - 1].draw();
+    //}
+    //else {
+    //    runi[backward - 1].setX(ninx);
+    //    runi[backward - 1].setY(niny);
+    //    runi[backward - 1].flipHorizontal(true);
+    //    runi[backward - 1].setScale(.2);
+    //    runi[backward - 1].draw();
+    //}
+
+    n->Draw();
 
     graphics->spriteEnd();
 }

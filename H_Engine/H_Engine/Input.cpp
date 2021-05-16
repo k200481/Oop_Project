@@ -62,8 +62,8 @@ void Input::keyIn(WPARAM wParam)
             textIn.erase(textIn.size()-1);
     }
     else{
-        textIn += wParam;               
-        charIn = wParam;                
+        textIn += char(wParam);               
+        charIn = char(wParam);                
     }
 
     if ((char)wParam == '\r')     
