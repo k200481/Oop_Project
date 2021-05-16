@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Deninja.h" />
     <ClInclude Include="game.h" />
@@ -30,12 +31,13 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Deninja.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
