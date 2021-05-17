@@ -16,7 +16,7 @@ private:
     Bullet* b = NULL;
     Ninja* n = NULL;
     Ship* s = NULL;
-    
+
     TextureManager Bgmanager;
 	Image Bg;
     

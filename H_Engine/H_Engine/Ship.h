@@ -4,6 +4,8 @@
 #include "textureManager.h"
 #include "image.h"
 
+#include "Animation.h"
+
 #include <vector>
 
 class Ship
@@ -12,31 +14,21 @@ public:
 	Ship(float initial_x, float initial_y, Graphics* graphics);
 	Ship(const Vec2<float>& initial_position, Graphics* graphics);
 
+	// update position and animation
 	void Update();
+	// draw the ship
+	void Draw();
+
 	// updates the velocity of the ship
 	void SetVelocity(const Vec2<float>& new_velocity);
 	// updates the direction of the ship while keeping movement speed constant
 	void SetDirection(const Vec2<float>& new_direction);
 
 	// get the ship's position
-	Vec2<float> GetPosition() const {
-		return position;
-	}
-	Vec2<float> GetDirection() const {
-		return direction;
-	}
-	float GetMovementSpeed() const {
-		return movementSpeed;
-	}
-
-	// draww the ship
-	void Draw();
+	Vec2<float> GetPosition() const;
+	Vec2<float> GetDirection() const;
+	float GetMovementSpeed() const;
 private:
-	// initalize the frames
-	void InitizlizeTextures(Graphics* graphics);
-	// move to the next frame
-	void AdvanceFrame();
-
 	
 private:
 	// position
@@ -54,5 +46,9 @@ private:
 	std::vector<TextureManager> texManager;
 	std::vector<Image> image;
 	const float imageScale = 2.0f;
+
+	// list of files to load image from
+	static const std::vector<LPCWSTR> files;
+	Animation animation;
 };
 
