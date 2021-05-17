@@ -1,4 +1,7 @@
 #include "image.h"
+
+#include <assert.h>
+
 Image::Image(){
     initialized = false;
     spriteData.width = 2;
@@ -32,11 +35,15 @@ Image::~Image()
 {}
 bool Image::initialize(Graphics *g, int width, int height, int ncols, TextureManager *textureM)
 {
+    // make sure pointers passed were valid
+    assert(g != NULL);
+    assert(textureM != NULL);
     try{
         graphics = g;                           
         textureManager = textureM; 
 
         spriteData.texture = textureManager->getTexture();
+        assert(spriteData.texture != NULL);
         if(width == 0)
             width = textureManager->getWidth();
         spriteData.width = width;
@@ -58,6 +65,7 @@ bool Image::initialize(Graphics *g, int width, int height, int ncols, TextureMan
 
 void Image::draw(COLOR_ARGB color)
 {
+    
     if (!visible || graphics == NULL)
         return;
     // get fresh texture incase onReset() was called
