@@ -14,10 +14,10 @@ public:
 	{}
 
 	// addition/subtraction of two vectors
-	Vec2 operator+(const Vec2& rhs) {
+	Vec2 operator+(const Vec2& rhs) const {
 		return Vec2(x + rhs.x, y + rhs.y);
 	}
-	Vec2 operator-(const Vec2& rhs) {
+	Vec2 operator-(const Vec2& rhs) const {
 		return Vec2(x - rhs.x, y - rhs.y);
 	}
 	Vec2& operator+=(const Vec2& rhs) {
@@ -28,10 +28,10 @@ public:
 	}
 
 	// multiplication/division of vector with scalar
-	Vec2 operator*(T rhs) {
+	Vec2 operator*(T rhs) const {
 		return Vec2(x * rhs, y * rhs);
 	}
-	Vec2 operator/(T rhs) {
+	Vec2 operator/(T rhs) const {
 		return Vec2(x / rhs, y / rhs);
 	}
 	Vec2& operator*=(T rhs) {
@@ -41,14 +41,14 @@ public:
 		return *this = *this / rhs;
 	}
 
-	double MagnitudeSquared() {
+	double MagnitudeSquared() const {
 		return double(x) * double(x) + double(y) * double(y);
 	}
-	double Magnitude() {
+	double Magnitude() const {
 		return sqrt(MagnitudeSquared());
 	}
 
-	Vec2 UnitVector() {
+	Vec2 UnitVector() const {
 		return *this / T(Magnitude());
 	}
 	Vec2& ConvertToUnitVector() {

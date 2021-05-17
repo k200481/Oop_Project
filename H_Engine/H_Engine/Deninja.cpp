@@ -3,6 +3,7 @@ Deninja::Deninja(){}
 Deninja::~Deninja() {
     SAFE_DELETE(b);
     SAFE_DELETE(n);
+    SAFE_DELETE(s);
 }
 void Deninja::initialize(HWND hwnd) {
 	Game::initialize(hwnd);
@@ -13,30 +14,14 @@ void Deninja::initialize(HWND hwnd) {
     
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
     
-    if (!ship[0].initialize(graphics, 0, 0, 0, &ship5Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship1Texture.initialize(graphics, L"flying-saucer-1.png");
-    if (!ship[1].initialize(graphics, 0, 0, 0, &ship1Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship2Texture.initialize(graphics, L"flying-saucer-2.png");
-    if (!ship[2].initialize(graphics, 0, 0, 0, &ship2Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship3Texture.initialize(graphics, L"flying-saucer-3.png");
-    if (!ship[3].initialize(graphics, 0, 0, 0, &ship3Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship4Texture.initialize(graphics, L"flying-saucer-4.png");
-    if (!ship[4].initialize(graphics, 0, 0, 0, &ship4Texture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship"));
-    ship5Texture.initialize(graphics, L"flying-saucer-5.png");
-    
     n = new Ninja(0.0f, 800.0f, graphics);
+    s = new Ship(0.0f, 10.0f, graphics);
 }
 void Deninja::update() {
-    one = (one <= 3) ? one + 1 : 0;
     
     if (b == NULL) {
         // create a new bullet if there is none
-        const Vec2<float> shipPosition(ship[one].getCenterX(), ship[one].getCenterY());
+        const Vec2<float> shipPosition(s->GetPosition());
         b = new Bullet(shipPosition);
     }
     else {
@@ -53,17 +38,13 @@ void Deninja::update() {
         }
     }
 
-    if (!shipdir)
-        if (ship[one].getX() < GAME_WIDTH - ship[one].getWidth()-20)
-            shipx = shipx + 10;
-        else
-            shipdir = !shipdir;
-    if(shipdir)
-        if(ship[one].getX() > 0)
-        shipx = shipx - 10;
-    else
-        shipdir = !shipdir;
-    ship[one].setX(shipx);
+    if (s->GetPosition().x <= 10.0f && s->GetDirection().x < 0) {
+        s->SetDirection(Vec2<float>(1, 0));
+    }
+    else if (s->GetPosition().x >= GAME_WIDTH && s->GetDirection().x > 0) {
+        s->SetDirection(Vec2<float>(-1, 0));
+    }
+    s->Update();
 
     // update player's position
     Vec2<float> playerVelocity(0.0f,0.0f);
@@ -95,10 +76,10 @@ void Deninja::collisions(){
         const float bulletCenterX = b->GetX();
         const float bulletCenterY = b->GetY();
 
-        const float playerLeft = runi[runt].getCenterX() - 30;
+        /*const float playerLeft = runi[runt].getCenterX() - 30;
         const float playerRight = runi[runt].getCenterX() + 30;
         const float playerTop = runi[runt].getY() - 100;
-        const float playerBottom = runi[runt].getY() + 100;
+        const float playerBottom = runi[runt].getY() + 100;*/
 
         //if ( bulletCenterX >= playerLeft && bulletCenterX <= playerRight
         //    && bulletCenterY >= playerTop && bulletCenterY <= playerBottom )
@@ -114,7 +95,7 @@ void Deninja::releaseAll()
 {
     Bgmanager.onLostDevice();
     for (int x = 0; x < 11; x++) {
-        runmanager[x].onLostDevice();
+//        runmanager[x].onLostDevice();
     }
     Game::releaseAll();
     return;
@@ -123,7 +104,7 @@ void Deninja::resetAll()
 {
     Bgmanager.onResetDevice();
     for (int x = 0; x < 11; x++) {
-        runmanager[x].onResetDevice();
+//       runmanager[x].onResetDevice();
     }
     Game::resetAll();
     return;
@@ -138,8 +119,7 @@ void Deninja::render()
         b->Draw();
     }
 
-    ship[one].setScale(2);
-    ship[one].draw();
+    s->Draw();
 
     n->Draw();
 
