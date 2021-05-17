@@ -7,6 +7,7 @@
 
 #include "Vec2.h"
 #include "Ninja.h"
+#include "Ship.h"
 #include "Bullet.h"
 
 class Deninja :public Game
@@ -14,28 +15,13 @@ class Deninja :public Game
 private:
     Bullet* b = NULL;
     Ninja* n = NULL;
+    Ship* s = NULL;
     
     TextureManager Bgmanager;
 	Image Bg;
-    TextureManager ship1Texture;
-    TextureManager ship2Texture;
-    TextureManager ship3Texture;
-    TextureManager ship4Texture;
-    TextureManager ship5Texture;
-    Image ship[5];
-    float shipx;
-    float shipy;
-    int one;
-    TextureManager runmanager[11];
-    Image runi[11];
-    int runt;
-    int forward=0;
-    bool direction = false;
-    int backward=0;
-    float ninx = 0; 
-    int jump=0;
-    bool shipdir = false;
-    float niny=800;
+    
+
+
     int score = 0;
 public:
     Deninja();

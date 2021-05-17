@@ -28,6 +28,7 @@
     <ClInclude Include="image.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Ninja.h" />
+    <ClInclude Include="Ship.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Window.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="image.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Ninja.cpp" />
+    <ClCompile Include="Ship.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="winmain.cpp" />
