@@ -49,6 +49,10 @@ public:
 
 	// get unit vector
 	Vec2 UnitVector() const {
+		const double m = Magnitude();
+		if (m == 0) {
+			return Vec2();
+		}
 		return *this / float(Magnitude());
 	}
 	Vec2& ConvertToUnitVector() {

@@ -26,7 +26,10 @@ public:
 	
 	// update velocity based on given acceleration and deltatime
 	void UpdateVelocity(const Vec2& delta_velocity);
-	// handles the mess that is jump physics
+	
+	// override to also consider jumping
+	bool ProcessWallCollision(const _Rect& walls) override;
+	// 
 	void Jump();
 
 	// draw sprite

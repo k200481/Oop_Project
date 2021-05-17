@@ -26,14 +26,12 @@ Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 	:
 	BasicEntity(initial_position)
 {
-	// running right
+	// running
 	animations.push_back( Animation( graphics, run_files, imageScale ) );
-	// running left
-	animations.push_back( Animation( graphics, run_files, -imageScale ) );
-	// idle right
-	animations.push_back( Animation (graphics, idle_files, imageScale ) );
-	// idle left
-	animations.push_back( Animation (graphics, idle_files, -imageScale ) );
+	// jumping
+	animations.push_back( Animation( graphics, run_files, imageScale ) );
+	// idle
+	animations.push_back( Animation(graphics, idle_files, imageScale ) );
 
 	// get width and height of sprite (assume all sprites have the same dimensions... which they should)
 	SetWidth(animations[0].GetWidth());
@@ -51,6 +49,26 @@ void Ninja::UpdateVelocity(const Vec2& delta_velocity)
 	// update velocity
 	SetVelocity(GetVelocity() + delta_velocity);
 	UpdateStateAndDirection(delta_velocity);
+}
+
+bool Ninja::ProcessWallCollision(const _Rect& walls)
+{
+	const _Rect& rect = GetRect();
+
+	if (int(rect.bottom) >= int(walls.bottom)) {
+		Vec2 vel = GetVelocity();
+		vel.y = 0.0f;
+		SetVelocity(vel);
+	}
+
+	return BasicEntity::ProcessWallCollision(walls);
+}
+
+void Ninja::Jump()
+{
+	if (!IsInAir()) {
+		SetVelocity(Vec2(0.0f, -400.0f));
+	}
 }
 
 void Ninja::Draw()
@@ -76,7 +94,7 @@ void Ninja::SetVelocity(const Vec2& new_velocity)
 
 void Ninja::UpdateStateAndDirection(const Vec2& v)
 {
-	if (v.y != 0.0f) {
+	if (v.y != 0) {
 		// jumping
 		state = State::Jumping;
 	}
