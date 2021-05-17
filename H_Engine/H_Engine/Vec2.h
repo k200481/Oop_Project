@@ -1,13 +1,12 @@
 #pragma once
 #include <math.h>
 
-template<typename T>
 class Vec2
 {
 public:
 	Vec2()
 	{}
-	Vec2( T x, T y )
+	Vec2( float x, float y )
 		:
 		x(x),
 		y(y)
@@ -28,16 +27,16 @@ public:
 	}
 
 	// multiplication/division of vector with scalar
-	Vec2 operator*(T rhs) const {
+	Vec2 operator*(float rhs) const {
 		return Vec2(x * rhs, y * rhs);
 	}
-	Vec2 operator/(T rhs) const {
+	Vec2 operator/(float rhs) const {
 		return Vec2(x / rhs, y / rhs);
 	}
-	Vec2& operator*=(T rhs) {
+	Vec2& operator*=(float rhs) {
 		return *this = *this * rhs;
 	}
-	Vec2& operator/=(T rhs) {
+	Vec2& operator/=(float rhs) {
 		return *this = *this / rhs;
 	}
 
@@ -48,14 +47,15 @@ public:
 		return sqrt(MagnitudeSquared());
 	}
 
+	// get unit vector
 	Vec2 UnitVector() const {
-		return *this / T(Magnitude());
+		return *this / float(Magnitude());
 	}
 	Vec2& ConvertToUnitVector() {
 		return *this = UnitVector();
 	}
 public:
-	// this is very simple data, no need to keep it private
-	T x = T(0);
-	T y = T(0);
+	// this is very basic data, no need to keep it private
+	float x = 0.0f;
+	float y = 0.0f;
 };

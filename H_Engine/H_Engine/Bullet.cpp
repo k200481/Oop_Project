@@ -8,7 +8,7 @@ Image Bullet::img;
 void Bullet::InitBulletAnimation(Graphics* graphics) {
 	// initialize the texture manager
 	if (!texManager.initialize(graphics, file)) {
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+		throw GameError(gameErrorNS::FATAL_ERROR, L"Error initializing bullet");
 	}
 	// initialize basic info for the bullet img
 	img.initialize(graphics, 0, 0, 0, &texManager);
@@ -18,16 +18,16 @@ void Bullet::InitBulletAnimation(Graphics* graphics) {
 	animationsInitialized = true;
 }
 
-Bullet::Bullet(const Vec2<float>& position)
+Bullet::Bullet(const Vec2& position)
 	:
 	position(position)
 {
 	if (!animationsInitialized) {
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Bullet image not initialized"));
+		throw GameError(gameErrorNS::FATAL_ERROR, L"Bullet image not initialized");
 	}
 }
 
-void Bullet::UpdatePosition(const Vec2<float>& velocity) {
+void Bullet::UpdatePosition(const Vec2& velocity) {
 	// update position
 	position += velocity;
 
@@ -45,7 +45,7 @@ float Bullet::GetY() const {
 	return position.y;
 }
 
-Vec2<float> Bullet::GetPosition() const {
+Vec2 Bullet::GetPosition() const {
 	return position;
 }
 

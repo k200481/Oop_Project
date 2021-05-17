@@ -1,128 +1,99 @@
 #include "Ninja.h"
 
+const std::vector<LPCWSTR> Ninja::run_files = {
+	L"Run__000.png",
+	L"Run__001.png",
+	L"Run__002.png",
+	L"Run__003.png",
+	L"Run__004.png",
+	L"Run__005.png",
+	L"Run__006.png",
+	L"Run__007.png",
+	L"Run__008.png",
+	L"Run__009.png"
+};
+const std::vector<LPCWSTR> Ninja::idle_files = { 
+	L"Idle__000.png" 
+};
+
 Ninja::Ninja(float initial_x, float initial_y, Graphics* graphics)
 	:
-	Ninja(Vec2<float>(initial_x, initial_y), graphics)
+	Ninja(Vec2(initial_x, initial_y), graphics)
 {
 }
 
-Ninja::Ninja(const Vec2<float>& initial_position, Graphics* graphics)
+Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 	:
-	position(initial_position)
+	BasicEntity(initial_position)
 {
-	// initialize all the runs frames
-	for (int i = 0; i <= runFrameCount; i++) {
-		texManager.emplace_back();
-	}
+	// running right
+	animations.push_back( Animation( graphics, run_files, imageScale ) );
+	// running left
+	animations.push_back( Animation( graphics, run_files, -imageScale ) );
+	// idle right
+	animations.push_back( Animation (graphics, idle_files, imageScale ) );
+	// idle left
+	animations.push_back( Animation (graphics, idle_files, -imageScale ) );
 
-	// initialize all the frames in the animation, gonna make a frame class to deal with this later, probably
-	// initialize textures
-	InitializeTextures(graphics);
-	// initialize images
-	for (int i = 0; i <= runFrameCount; i++) {
-		image.emplace_back();
-		image[i].initialize(graphics, 0, 0, 0, &texManager[i]);
-		image[i].setScale(imageScale);
-	}
 	// get width and height of sprite (assume all sprites have the same dimensions... which they should)
-	width = image[0].getWidth() * imageScale;
-	height = image[0].getHeight() * imageScale;
+	SetWidth(animations[0].GetWidth());
+	SetHeight(animations[0].GetHeight());
 }
 
-void Ninja::Update(const Vec2<float>& velocity)
+void Ninja::Update(float deltatime)
 {
-	// update position
-	position += velocity;
-
-	if (velocity.x == 0.0f) {
-		currentFrame = idleFrameIndex;
-	}
-	else {
-		// turn ninja in the correct direction
-		if (velocity.x > 0) { // moving right
-			direction = Direction::Right;
-		}
-		else {			   // moving left
-			direction = Direction::Left;
-		}
-		// move to the next frame before updating the image
-		AdvanceFrame();
-	}
-	// update the image
-	UpdateImage();
+	BasicEntity::UpdatePosition(deltatime);
+	animations[int(state)].Advance(deltatime);
 }
 
-Vec2<float> Ninja::GetPosition() const
+void Ninja::UpdateVelocity(const Vec2& delta_velocity)
 {
-	return position;
+	// update velocity
+	SetVelocity(GetVelocity() + delta_velocity);
+	UpdateStateAndDirection(delta_velocity);
 }
 
 void Ninja::Draw()
 {
-	image[currentFrame].draw();
+	animations[int(state)].Draw(GetPosition(), direction);
 }
 
-void Ninja::AdvanceFrame()
+Vec2 Ninja::GetPosition() const
 {
-	heldFor += 0.01f;
-	if (heldFor < holdDuration) {
-		return;
-	}
-	heldFor = 0.0f;
-
-	currentFrame++;
-	if (currentFrame >= runFrameCount) { // wrap around to beginning
-		currentFrame = 0;
-	}
+	return BasicEntity::GetPosition();
 }
 
-void Ninja::UpdateImage()
+Vec2 Ninja::GetVelocity() const
 {
-	const bool horizontalFlip = image[currentFrame].getSpriteInfo().flipHorizontal;
-	const float scaling = image[currentFrame].getSpriteInfo().scale;
-	if (direction == Direction::Right) {
-		image[currentFrame].flipHorizontal(false);
+	return BasicEntity::GetVelocity();
+}
+
+void Ninja::SetVelocity(const Vec2& new_velocity)
+{
+	BasicEntity::SetVelocity(new_velocity);
+	UpdateStateAndDirection(new_velocity);
+}
+
+void Ninja::UpdateStateAndDirection(const Vec2& v)
+{
+	if (v.y != 0.0f) {
+		// jumping
+		state = State::Jumping;
+	}
+	else if (v.x != 0.0f) {
+		// running
+		state = State::Running;
 	}
 	else {
-		image[currentFrame].flipHorizontal(true);
+		// idle
+		state = State::Idle;
 	}
 
-	image[currentFrame].setX(position.x);
-	image[currentFrame].setY(position.y);
-}
-
-void Ninja::InitializeTextures(Graphics* graphics) {
-	if (!texManager[0].initialize(graphics, L"Run__000.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
+	if (v.x > 0) {
+		direction = Animation::Direction::Right;
 	}
-	if (!texManager[1].initialize(graphics, L"Run__001.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
+	else if (v.x < 0) {
+		direction = Animation::Direction::Left;
 	}
-	if (!texManager[2].initialize(graphics, L"Run__002.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[3].initialize(graphics, L"Run__003.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[4].initialize(graphics, L"Run__004.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[5].initialize(graphics, L"Run__005.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[6].initialize(graphics, L"Run__006.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[7].initialize(graphics, L"Run__007.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[8].initialize(graphics, L"Run__008.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[9].initialize(graphics, L"Run__009.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
-	if (!texManager[10].initialize(graphics, L"idle__000.png")) {
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error Initialising Ninja");
-	}
+	// else retain previous direction
 }

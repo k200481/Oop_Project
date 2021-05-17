@@ -11,12 +11,12 @@ public:
 	// load bullet image into program
 	static void InitBulletAnimation(Graphics* graphics);
 	//constructor
-	Bullet(const Vec2<float>& position);
-	void UpdatePosition(const Vec2<float>& velocity);
+	Bullet(const Vec2& position);
+	void UpdatePosition(const Vec2& velocity);
 	// position getters
 	float GetX() const;
 	float GetY() const;
-	Vec2<float> GetPosition() const;
+	Vec2 GetPosition() const;
 	// used to destroy bullet
 	void BulletDestroyed();
 	// returns true if bullet has been destroyed
@@ -28,7 +28,7 @@ private:
 	// used to make sure if the bullet image has been loaded before anything is one with bullet
 	static bool animationsInitialized;
 	// center of the bulet
-	Vec2<float> position;
+	Vec2 position;
 	// width and height of bullet, will be used to create rect for collision detection
 	const float width = 58.0f;
 	const float height = 36.0f;
