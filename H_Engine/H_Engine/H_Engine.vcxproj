@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="BasicEntity.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Deninja.h" />
@@ -33,9 +34,11 @@
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="_Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BasicEntity.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Deninja.cpp" />
     <ClCompile Include="game.cpp" />

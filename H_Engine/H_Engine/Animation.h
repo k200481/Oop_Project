@@ -9,18 +9,26 @@
 class Animation
 {
 public:
-	// keeping this class public because it makkes little sense to use "animation" for cases like the ninja being idle
+	// for classes like the ninja which have a ditinct direction
+	enum class Direction {
+		Right,
+		Left
+	};
+private:
+	// utility class
 	// one frame of animation
 	class Frame {
 	public:
-		Frame(Graphics* graphics, LPCWSTR file, float scaling)
+		Frame(Graphics* graphics, LPCWSTR file, float scaling, float angle)
 		{
-			if (!texManager.initialize(graphics, file))
-				throw GameError(gameErrorNS::FATAL_ERROR, "Unable to load texture");
-			if(!image.initialize(graphics, 0, 0, 0, &texManager))
-				throw GameError(gameErrorNS::FATAL_ERROR, "Unable to load image");
-			
-			image.setScale(scaling);
+			if (!texManager.initialize(graphics, file)) {
+				throw GameError(gameErrorNS::FATAL_ERROR, L"Unable to load texture");
+			}
+			if (!image.initialize(graphics, 0, 0, 0, &texManager)) {
+				throw GameError(gameErrorNS::FATAL_ERROR, L"Unable to load image");
+			}
+			image.setScale(abs(scaling));
+			image.setDegrees(angle);
 		}
 		Frame(const Frame& other)
 			:
@@ -30,16 +38,29 @@ public:
 			// the address of the tex manager will change after it is copied
 			image.setTextureManager(&texManager);
 		}
-		void Draw(const Vec2<float>& position) {
+		void Draw(const Vec2& position, Direction direction) {
 			// call the other guy, cuz I don't wanna type the same thing again
-			Draw(position.x, position.y);
+			Draw(position.x, position.y, direction);
 		}
-		void Draw(float x, float y) {
+		void Draw(float x, float y, Direction direction) {
 			// set the sprite's position
 			image.setX(x);
 			image.setY(y);
+			// flip if facing left, dont oterwise
+			if (direction == Direction::Right) {
+				image.flipHorizontal(false);
+			}
+			else {
+				image.flipHorizontal(true);
+			}
 			// draw it
 			image.draw();
+		}
+		float GetWidth() const {
+			return image.getWidth() * image.getScale();
+		}
+		float GetHeight() const {
+			return image.getHeight() * image.getScale();
 		}
 	private:
 		TextureManager texManager;
@@ -47,21 +68,16 @@ public:
 	};
 public:
 	// constructor loads all the images in given vector into the class
-	Animation(Graphics* graphics, const std::vector<LPCWSTR>& files, float scaling, float frameHoldDuration = 0.1f);
-	//
-	Animation(float frameHoldDuration = 0.1f) 
-		:
-		frameHoldDuration(frameHoldDuration)
-	{
-	}
-	void AddFrame(Graphics* graphics, LPCWSTR file, float scaling) {
-		frames.push_back(Frame(graphics, file, scaling));
-	}
+	Animation(Graphics* graphics, const std::vector<LPCWSTR>& files, float scaling, float angle = 0.0f, float frameHoldDuration = 0.1f);
 	// moves to the next frome after given hold duration
 	void Advance(float deltatime);
 	// draw a frame on the given location
-	void Draw(const Vec2<float>& position);
-	void Draw(float x, float y);
+	void Draw(const Vec2& position, Direction direction = Direction::Right);
+	void Draw(float x, float y, Direction direction = Direction::Right);
+	// get the width of sprie post-scaling
+	float GetWidth() const;
+	// get the height of sprie post-scaling
+	float GetHeight() const;
 private:
 	// vector of frames
 	std::vector<Frame> frames;

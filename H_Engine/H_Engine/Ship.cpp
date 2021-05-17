@@ -10,23 +10,23 @@ const std::vector<LPCWSTR> Ship::files = {
 
 Ship::Ship(float initial_x, float initial_y, Graphics* graphics)
 	:
-	Ship(Vec2<float>(initial_x, initial_y), graphics)
+	Ship(Vec2(initial_x, initial_y), graphics)
 {
 }
 
-Ship::Ship(const Vec2<float>& initial_position, Graphics* graphics)
+Ship::Ship(const Vec2& initial_position, Graphics* graphics)
 	:
 	position(initial_position),
-	animation(graphics, files, 2.0f)
+	animation(graphics, files, imageScale)
 {
 }
 
-void Ship::Update()
+void Ship::Update(float deltatime)
 {
 	// update position
-	position += direction * movementSpeed;
+	position += direction * movementSpeed * deltatime;
 	// pass deltatime to animation
-	animation.Advance(0.01f);
+	animation.Advance(deltatime);
 }
 
 void Ship::Draw()
@@ -34,23 +34,23 @@ void Ship::Draw()
 	animation.Draw(position);
 }
 
-void Ship::SetVelocity(const Vec2<float>& new_velocity)
+void Ship::SetVelocity(const Vec2& new_velocity)
 {
 	direction = new_velocity.UnitVector();
 	movementSpeed = float(new_velocity.Magnitude());
 }
 
-void Ship::SetDirection(const Vec2<float>& new_direction)
+void Ship::SetDirection(const Vec2& new_direction)
 {
 	direction = new_direction.UnitVector();
 }
 
-Vec2<float> Ship::GetPosition() const
+Vec2 Ship::GetPosition() const
 {
 	return position;
 }
 
-Vec2<float> Ship::GetDirection() const
+Vec2 Ship::GetDirection() const
 {
 	return direction;
 }

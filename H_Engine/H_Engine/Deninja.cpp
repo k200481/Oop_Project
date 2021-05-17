@@ -14,6 +14,7 @@ void Deninja::initialize(HWND hwnd) {
 	Game::initialize(hwnd);
 
     s = new Ship(100.0f, 100.0f, graphics);
+    n = new Ninja(0.0f, 800.0f, graphics);
 
     Bgmanager.initialize(graphics, L"BG.png");
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
@@ -21,31 +22,33 @@ void Deninja::initialize(HWND hwnd) {
 }
 
 void Deninja::update() {
-    
-    s->Update();
+    const float deltatime = 0.1f;
+
+    s->Update(deltatime);
+
+    Vec2 vel = { 0,0 };
+
+    if (input->isKeyDown('D')) {
+        vel.x += 10.0f;
+    }
+    else if (input->isKeyDown('A')) {
+        vel.x -= 10.0f;
+    }
+
+
+    n->SetVelocity(vel);
+    n->Update(deltatime);
+
     // render everything
     Deninja::render();
 }
 
 void Deninja::ai(){}
 void Deninja::collisions(){
-    if (b != NULL) {
+    const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT);
 
+    n->ProcessWallCollision(walls);
 
-        /*const float playerLeft = runi[runt].getCenterX() - 30;
-        const float playerRight = runi[runt].getCenterX() + 30;
-        const float playerTop = runi[runt].getY() - 100;
-        const float playerBottom = runi[runt].getY() + 100;*/
-
-        //if ( bulletCenterX >= playerLeft && bulletCenterX <= playerRight
-        //    && bulletCenterY >= playerTop && bulletCenterY <= playerBottom )
-        //{
-        //    wchar_t buffer[256];
-        //    wsprintfW(buffer, L"Your Score is %d", score);
-        //    MessageBox(NULL, L"You lost", buffer, MB_ICONERROR);
-        //    PostQuitMessage(1);
-        //}
-    }
 }
 void Deninja::releaseAll()
 {
@@ -73,6 +76,7 @@ void Deninja::render()
     Bg.draw();
     
     s->Draw();
+    n->Draw();
 
     graphics->spriteEnd();
 }
