@@ -6,15 +6,17 @@ Deninja::Deninja()
 
 Deninja::~Deninja() {
     SAFE_DELETE(b);
-    SAFE_DELETE(n);
-    SAFE_DELETE(s);
+    SAFE_DELETE(ninja);
+    SAFE_DELETE(ship);
 }
 
 void Deninja::initialize(HWND hwnd) {
 	Game::initialize(hwnd);
 
-    s = new Ship(100.0f, 100.0f, graphics);
-    n = new Ninja(0.0f, 800.0f, graphics);
+    ship = new Ship(100.0f, 100.0f, graphics);
+    ninja = new Ninja(0.0f, 800.0f, graphics);
+
+    ninja->Jump();
 
     Bgmanager.initialize(graphics, L"BG.png");
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
@@ -22,33 +24,46 @@ void Deninja::initialize(HWND hwnd) {
 }
 
 void Deninja::update() {
-    const float deltatime = 0.1f;
+    const float deltatime = 1 / 60.0f;
 
-    s->Update(deltatime);
+    ship->Update(deltatime);
 
     if (b == NULL) {
-        b = new Bullet(s->GetPosition(), { 0.0f, 10.0f }, graphics);
+        b = new Bullet(ship->GetPosition(), { 0.0f, 10.0f }, graphics);
     }
     else if (b->IsDestroyed()) {
         delete b;
         b = NULL;
-        b = new Bullet(s->GetPosition(), { 0.0f, 10.0f }, graphics);
+        b = new Bullet(ship->GetPosition(), { 0.0f, 10.0f }, graphics);
     }
     else {
         b->Update(deltatime);
     }
+
     Vec2 vel = { 0,0 };
+    const float movementSpeed = 100.0f;
 
     if (input->isKeyDown('D')) {
-        vel.x += 10.0f;
+        vel.x += movementSpeed;
     }
     else if (input->isKeyDown('A')) {
-        vel.x -= 10.0f;
+        vel.x -= movementSpeed;
+    }
+    if (input->wasKeyPressed('W')) {
+        if (!ninja->IsInAir()) {
+            vel.y = -500.0f;
+        }
     }
 
-
-    n->SetVelocity(vel);
-    n->Update(deltatime);
+    if (ninja->IsInAir()) {
+        vel.x /= 100.0f;
+        vel.y += 10.0f;
+        ninja->UpdateVelocity(vel);
+    }
+    else {
+        ninja->SetVelocity(vel);
+    }
+    ninja->Update(deltatime);
 
     // render everything
     Deninja::render();
@@ -57,13 +72,13 @@ void Deninja::update() {
 void Deninja::ai(){}
 void Deninja::collisions()
 {
-    const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT);
+    const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT-100u);
 
-    if (n->DetectEntityCollision(*b)) {
+    if (ninja->DetectEntityCollision(*b)) {
         b->BulletDestroyed();
     }
 
-    n->ProcessWallCollision(walls);
+    ninja->ProcessWallCollision(walls);
     b->ProcessWallCollision(walls);
 
 }
@@ -91,11 +106,9 @@ void Deninja::render()
     graphics->spriteBegin();
     
     Bg.draw();
-
-    Bullet({ 100, 100 }, { 0,0 }, graphics).Draw();
     
-    s->Draw();
-    n->Draw();
+    ship->Draw();
+    ninja->Draw();
     b->Draw();
 
     graphics->spriteEnd();
