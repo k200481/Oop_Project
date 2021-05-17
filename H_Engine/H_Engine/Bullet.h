@@ -1,22 +1,20 @@
 #pragma once
-#include "textureManager.h"
-#include "image.h"
-#include "Constant.h"
 
+#include "BasicEntity.h"
+#include "Animation.h"
 #include "Vec2.h"
 
-class Bullet
+class Bullet : public BasicEntity
 {
 public:
-	// load bullet image into program
-	static void InitBulletAnimation(Graphics* graphics);
 	//constructor
-	Bullet(const Vec2& position);
-	void UpdatePosition(const Vec2& velocity);
-	// position getters
-	float GetX() const;
-	float GetY() const;
-	Vec2 GetPosition() const;
+	Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics);
+
+	// update position and animation
+	void Update(float deltatime);
+	// override process wall collision
+	bool ProcessWallCollision(const _Rect& walls) override;
+
 	// used to destroy bullet
 	void BulletDestroyed();
 	// returns true if bullet has been destroyed
@@ -24,18 +22,16 @@ public:
 	// draws bullet depending on its position
 	void Draw();
 
+	// getters and setters
+	Vec2 GetPosition() const;
+
 private:
-	// used to make sure if the bullet image has been loaded before anything is one with bullet
-	static bool animationsInitialized;
-	// center of the bulet
-	Vec2 position;
-	// width and height of bullet, will be used to create rect for collision detection
-	const float width = 58.0f;
-	const float height = 36.0f;
 	// delete the bullet when this becomes true
 	bool isDestroyed = false;
-	// static pointers for bullet rendering
-	static const wchar_t* file;
-	static TextureManager texManager;
-	static Image img;
+
+	// animation info
+	static const std::vector<LPCWSTR> file;
+	const float degrees = 270.0f;
+	const float imageScale = 1.0f;
+	Animation animation;
 };

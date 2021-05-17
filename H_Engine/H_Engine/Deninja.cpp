@@ -26,6 +26,17 @@ void Deninja::update() {
 
     s->Update(deltatime);
 
+    if (b == NULL) {
+        b = new Bullet(s->GetPosition(), { 0.0f, 10.0f }, graphics);
+    }
+    else if (b->IsDestroyed()) {
+        delete b;
+        b = NULL;
+        b = new Bullet(s->GetPosition(), { 0.0f, 10.0f }, graphics);
+    }
+    else {
+        b->Update(deltatime);
+    }
     Vec2 vel = { 0,0 };
 
     if (input->isKeyDown('D')) {
@@ -44,10 +55,16 @@ void Deninja::update() {
 }
 
 void Deninja::ai(){}
-void Deninja::collisions(){
+void Deninja::collisions()
+{
     const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT);
 
+    if (n->DetectEntityCollision(*b)) {
+        b->BulletDestroyed();
+    }
+
     n->ProcessWallCollision(walls);
+    b->ProcessWallCollision(walls);
 
 }
 void Deninja::releaseAll()
@@ -74,9 +91,12 @@ void Deninja::render()
     graphics->spriteBegin();
     
     Bg.draw();
+
+    Bullet({ 100, 100 }, { 0,0 }, graphics).Draw();
     
     s->Draw();
     n->Draw();
+    b->Draw();
 
     graphics->spriteEnd();
 }

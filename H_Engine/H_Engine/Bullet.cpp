@@ -1,69 +1,54 @@
 #include "Bullet.h"
 
-bool Bullet::animationsInitialized = false;
-const wchar_t* Bullet::file = L"bullet.png";
-TextureManager Bullet::texManager;
-Image Bullet::img;
+const std::vector<LPCWSTR> Bullet::file = {
+	L"bullet.png"
+};
 
-void Bullet::InitBulletAnimation(Graphics* graphics) {
-	// initialize the texture manager
-	if (!texManager.initialize(graphics, file)) {
-		throw GameError(gameErrorNS::FATAL_ERROR, L"Error initializing bullet");
-	}
-	// initialize basic info for the bullet img
-	img.initialize(graphics, 0, 0, 0, &texManager);
-	img.setDegrees(270.0f);
-	img.setScale(1.0f);
-
-	animationsInitialized = true;
-}
-
-Bullet::Bullet(const Vec2& position)
+Bullet::Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics)
 	:
-	position(position)
+	BasicEntity(position, velocity),
+	animation(graphics, file, imageScale, degrees)
 {
-	if (!animationsInitialized) {
-		throw GameError(gameErrorNS::FATAL_ERROR, L"Bullet image not initialized");
+	// flipped because the image is horizontal but the bullet falls vertically
+	SetWidth(animation.GetHeight());
+	SetHeight(animation.GetWidth());
+}
+
+void Bullet::Update(float deltatime) 
+{
+	BasicEntity::UpdatePosition(deltatime);
+
+	// advancing animations is unnecessary with only one frame
+	// but it can be called in case more frames are ever added
+	animation.Advance(deltatime);
+}
+
+bool Bullet::ProcessWallCollision(const _Rect& walls)
+{
+	if (BasicEntity::ProcessWallCollision(walls)) {
+		BulletDestroyed();
 	}
+	return true;
 }
 
-void Bullet::UpdatePosition(const Vec2& velocity) {
-	// update position
-	position += velocity;
-
-	// will automatically be destroyed on reaching game height
-	if (int(position.y) >= GAME_HEIGHT) {
-		isDestroyed = true;
-	}
+Vec2 Bullet::GetPosition() const 
+{
+	return BasicEntity::GetPosition();
 }
 
-float Bullet::GetX() const {
-	return position.x;
-}
-
-float Bullet::GetY() const {
-	return position.y;
-}
-
-Vec2 Bullet::GetPosition() const {
-	return position;
-}
-
-void Bullet::BulletDestroyed() {
+void Bullet::BulletDestroyed() 
+{
 	isDestroyed = true;
 }
 
-bool Bullet::IsDestroyed() const {
+bool Bullet::IsDestroyed() const 
+{
 	return isDestroyed;
 }
 
-void Bullet::Draw() {
-	// make sure bullet isn't already destroyed
+void Bullet::Draw()
+{
 	if (!IsDestroyed()) {
-		// update the x and y of image before rendering
-		img.setX(position.x);
-		img.setY(position.y);
-		// draw
-		img.draw();
+		animation.Draw(GetPosition());
 	}
 }
