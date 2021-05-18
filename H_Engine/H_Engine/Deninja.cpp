@@ -5,7 +5,6 @@ Deninja::Deninja()
 }
 
 Deninja::~Deninja() {
-    SAFE_DELETE(b);
     SAFE_DELETE(ninja);
     SAFE_DELETE(ship);
 }
@@ -24,22 +23,16 @@ void Deninja::initialize(HWND hwnd) {
 }
 
 void Deninja::update() {
-    const float deltatime = 1 / 60.0f;
+    // get the time that has passed since the previous frame
+    const float deltatime = timer.Mark();
 
+    // update Ship's position
     ship->Update(deltatime);
 
-    if (b == NULL) {
-        b = new Bullet(ship->GetPosition(), { 0.0f, 10.0f }, graphics);
-    }
-    else if (b->IsDestroyed()) {
-        delete b;
-        b = NULL;
-        b = new Bullet(ship->GetPosition(), { 0.0f, 10.0f }, graphics);
-    }
-    else {
-        b->Update(deltatime);
-    }
+    // see if ship can fire a new bullet and do so if it can
 
+
+    // calculate the player's velocity based on user input
     Vec2 vel = { 0,0 };
     const float movementSpeed = 100.0f;
 
@@ -74,12 +67,7 @@ void Deninja::collisions()
 {
     const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT-100u);
 
-    if (ninja->DetectEntityCollision(*b)) {
-        b->BulletDestroyed();
-    }
-
     ninja->ProcessWallCollision(walls);
-    b->ProcessWallCollision(walls);
 
 }
 void Deninja::releaseAll()
@@ -109,7 +97,6 @@ void Deninja::render()
     
     ship->Draw();
     ninja->Draw();
-    b->Draw();
 
     graphics->spriteEnd();
 }

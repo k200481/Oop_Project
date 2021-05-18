@@ -32,6 +32,7 @@
     <ClInclude Include="Ninja.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="textureManager.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="_Rect.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Ninja.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="textureManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
