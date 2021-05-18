@@ -21,8 +21,8 @@ private:
     //
     Ninja* ninja = NULL;
     Ship* ship = NULL;
-    std::vector<Bullet*> bullets;
-    std::vector<Kunai*> kunai;
+    std::vector<Projectile*> bullets;
+    std::vector<Projectile*> kunai;
 
     // isn't really animated, but there's room for it to be
     // could also make a new class to handle 'scenes' with several animations

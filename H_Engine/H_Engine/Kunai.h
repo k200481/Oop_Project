@@ -13,15 +13,8 @@ public:
 	// override process wall collision
 	bool ProcessWallCollision(const _Rect& walls) override;
 
-	// used to destroy bullet
-	void SetDestroyed();
-	// returns true if bullet has been destroyed
-	bool IsDestroyed() const;
 	// draws bullet depending on its position
-	void Draw();
-
-	// getters and setters
-	Vec2 GetPosition() const;
+	void Draw() override;
 
 	// gotta override these
 
@@ -29,8 +22,6 @@ public:
 	void OnLostDevice() override;
 
 private:
-	//
-	bool isDestroyed = false;
 
 	// drawing related
 	// animation files

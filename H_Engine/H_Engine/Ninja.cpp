@@ -26,7 +26,8 @@ Ninja::Ninja(float initial_x, float initial_y, Graphics* graphics)
 
 Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 	:
-	Projectile(initial_position)
+	Projectile(initial_position),
+	firingManager(graphics, 2.0f)
 {
 	// running
 	animations.push_back( Animation( graphics, run_files, imageScale ) );
@@ -42,8 +43,9 @@ Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 
 void Ninja::Update(float deltatime)
 {
-	UpdatePosition(deltatime);
+	Projectile::Update(deltatime);
 	animations[int(state)].Advance(deltatime);
+	firingManager.Update(deltatime);
 }
 
 void Ninja::UpdateVelocity(const Vec2& delta_velocity)
@@ -71,6 +73,19 @@ void Ninja::Jump(float vertical_velocity)
 	v.y = -3.0f;
 	v = v.UnitVector() * vertical_velocity;
 	SetVelocity(v);
+}
+
+bool Ninja::CanFire() const
+{
+	return firingManager.CanFire();
+}
+
+Projectile* Ninja::Fire(const Vec2& target)
+{
+	const Vec2 dir = (target - GetPosition()).UnitVector();
+	const float magnitude = 1000.0f;
+
+	return firingManager.Fire(GetCenter(), dir * magnitude);
 }
 
 void Ninja::Draw()

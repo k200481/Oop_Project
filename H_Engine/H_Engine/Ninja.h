@@ -3,6 +3,8 @@
 #include "BasicEntity.h"
 #include "Projectile.h"
 #include "Animation.h"
+#include "FiringManager.h"
+#include "Kunai.h"
 
 #include "Vec2.h"
 #include <vector>
@@ -28,18 +30,21 @@ public:
 	
 	
 	// update position of ninja based on current velocity given deltatime
-	void Update(float deltatime);
+	void Update(float deltatime) override;
 	
 	// update velocity based on given acceleration and deltatime
 	void UpdateVelocity(const Vec2& delta_velocity);
 	
 	// override to also consider jumping
 	bool ProcessWallCollision(const _Rect& walls) override;
-	// 
+	// used for jumping instead of setting velocity directly
 	void Jump(float vertical_velocity);
 
+	bool CanFire() const;
+	Projectile* Fire(const Vec2& target);
+
 	// draw sprite
-	void Draw();
+	void Draw() override;
 	// getters and setters
 	// get position
 	Vec2 GetPosition() const;
@@ -75,12 +80,12 @@ private:
 	State state = State::Idle;
 	Animation::Direction direction = Animation::Direction::Right;
 
-	// animation management
-	const float imageScale = 0.2f;
+	FiringManager<Kunai> firingManager;
 
 	// all types of animations
+	float imageScale = 0.2f;
 	std::vector<Animation> animations;
-
+	// animation files
 	static const std::vector<LPCWSTR> run_files;
 	static const std::vector<LPCWSTR> idle_files;
 };

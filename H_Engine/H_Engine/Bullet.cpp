@@ -15,9 +15,9 @@ Bullet::Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics)
 	SetHeight(animation.GetWidth());
 }
 
-void Bullet::Update(float deltatime) 
+void Bullet::Update(float deltatime)
 {
-	UpdatePosition(deltatime);
+	Projectile::Update(deltatime);
 
 	// advancing animations is unnecessary with only one frame
 	// but it can be called in case more frames are ever added
@@ -34,11 +34,6 @@ bool Bullet::ProcessWallCollision(const _Rect& walls)
 	return true;
 }
 
-Vec2 Bullet::GetPosition() const 
-{
-	return BasicEntity::GetPosition();
-}
-
 void Bullet::OnResetDevice()
 {
 	animation.OnResetDevice();
@@ -47,16 +42,6 @@ void Bullet::OnResetDevice()
 void Bullet::OnLostDevice()
 {
 	animation.OnLostDevice();
-}
-
-void Bullet::SetDestroyed() 
-{
-	isDestroyed = true;
-}
-
-bool Bullet::IsDestroyed() const 
-{
-	return isDestroyed;
 }
 
 void Bullet::Draw()

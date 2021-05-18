@@ -15,19 +15,12 @@ public:
 	Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics);
 
 	// update position and animation
-	void Update(float deltatime);
+	void Update(float deltatime) override;
 	// override process wall collision
 	bool ProcessWallCollision(const _Rect& walls) override;
 
-	// used to destroy bullet
-	void SetDestroyed();
-	// returns true if bullet has been destroyed
-	bool IsDestroyed() const;
 	// draws bullet depending on its position
-	void Draw();
-
-	// getters and setters
-	Vec2 GetPosition() const;
+	void Draw() override;
 
 	// gotta override these
 
@@ -35,8 +28,6 @@ public:
 	void OnLostDevice() override;
 
 private:
-	// delete the bullet when this becomes true
-	bool isDestroyed = false;
 
 	// animation info
 	static const std::vector<LPCWSTR> file;

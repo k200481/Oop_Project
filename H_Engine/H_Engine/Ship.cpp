@@ -17,8 +17,8 @@ Ship::Ship(float initial_x, float initial_y, Graphics* graphics)
 Ship::Ship(const Vec2& initial_position, Graphics* graphics)
 	:
 	BasicEntity(initial_position),
-	graphics(graphics),
-	animation(graphics, files, imageScale)
+	firingManager(graphics, 1.0f),
+	animation(graphics, files, 2.0f)
 {
 	SetWidth(animation.GetWidth());
 	SetHeight(animation.GetHeight());
@@ -27,27 +27,25 @@ Ship::Ship(const Vec2& initial_position, Graphics* graphics)
 void Ship::Update(float deltatime)
 {
 	// update position
-	BasicEntity::UpdatePosition(deltatime);
+	BasicEntity::Update(deltatime);
 	// pass deltatime to animation
 	animation.Advance(deltatime);
 	// update time since last fire
-	fireTimePassed += deltatime;
+	firingManager.Update(deltatime);
 }
 
 bool Ship::CanFire()
 {
-	return fireTimePassed >= firePeriod;
+	return firingManager.CanFire();
 }
 
-Bullet* Ship::Fire()
+Projectile* Ship::Fire()
 {
 	// does not check for 'can fire'
 	// so the 'can fire' attriibute may be ignored, up to the field to decide
 	
 	// reset time
-	fireTimePassed = 0.0f;
-	// return pointer to new bullet
-	return new Bullet(GetCenter(), {0.0f, 0.0f}, graphics);
+	return firingManager.Fire(GetCenter(), Vec2());
 }
 
 void Ship::Draw()
