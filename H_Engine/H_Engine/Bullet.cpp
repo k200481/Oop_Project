@@ -26,7 +26,9 @@ void Bullet::Update(float deltatime)
 
 bool Bullet::ProcessWallCollision(const _Rect& walls)
 {
-	if (BasicEntity::ProcessWallCollision(walls)) {
+	// for now bullets get destroyed on any kind of collision instead
+	// of rebounding, might change that later
+	if (Projectile::ProcessWallCollision(walls)) {
 		BulletDestroyed();
 	}
 	return true;
