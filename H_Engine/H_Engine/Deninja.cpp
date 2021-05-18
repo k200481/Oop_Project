@@ -8,6 +8,7 @@ Deninja::~Deninja()
 {
     SAFE_DELETE(ninja);
     SAFE_DELETE(ship);
+    SAFE_DELETE(background);
 }
 
 void Deninja::initialize(HWND hwnd) 
@@ -17,8 +18,8 @@ void Deninja::initialize(HWND hwnd)
     ship = new Ship(100.0f, 100.0f, graphics);
     ninja = new Ninja(0.0f, 800.0f, graphics);
 
-    Bgmanager.initialize(graphics, L"BG.png");
-    Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
+    // just making a vector on the go
+    background = new Animation(graphics, std::vector<LPCWSTR>({L"BG.png"}), 1.0f);
 
     ship->SetVelocity(Vec2(400.0f, 0.0f));
 }
@@ -77,7 +78,7 @@ void Deninja::collisions()
 
 void Deninja::releaseAll()
 {
-    Bgmanager.onLostDevice();
+//    Bgmanager.onLostDevice();
     for (int x = 0; x < 11; x++) {
 //        runmanager[x].onLostDevice();
     }
@@ -87,7 +88,7 @@ void Deninja::releaseAll()
 
 void Deninja::resetAll()
 {
-    Bgmanager.onResetDevice();
+//    Bgmanager.onResetDevice();
     for (int x = 0; x < 11; x++) {
 //       runmanager[x].onResetDevice();
     }
@@ -98,8 +99,8 @@ void Deninja::resetAll()
 void Deninja::render()
 {
     graphics->spriteBegin();
-    
-    Bg.draw();
+
+    background->Draw(Vec2(0.0f, 0.0f));
     
     ship->Draw();
     ninja->Draw();
