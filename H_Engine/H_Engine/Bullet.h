@@ -25,6 +25,11 @@ public:
 	// getters and setters
 	Vec2 GetPosition() const;
 
+	// gotta override these
+
+	void OnResetDevice() override;
+	void OnLostDevice() override;
+
 private:
 	// delete the bullet when this becomes true
 	bool isDestroyed = false;

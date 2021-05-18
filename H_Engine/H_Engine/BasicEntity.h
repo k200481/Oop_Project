@@ -17,8 +17,21 @@ public:
 	// get the center of the entity
 	Vec2 GetCenter() const;
 
+	// animation related
+	// can not be implemented here as all entities have very different animations
+	// but they all DO have animations
+	// could also just make a local protected vector of animations, but... this is a BASIC entity
+	
+	// must be implemented by every entity
+	virtual void OnResetDevice() = 0;
+	// must be implemented by every entity
+	virtual void OnLostDevice() = 0;
+
 protected:
-	// protected constructors so class becomes abstract
+	// constructors
+	// were originally protected to make the class abstract, but that's not necessary anymore
+	// since the ure virtual functions were added
+	// but I'm still gonne keep them here anyway
 	BasicEntity();
 	BasicEntity(const Vec2& position);
 	BasicEntity(const Vec2& position, const Vec2& velocity);

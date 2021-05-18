@@ -40,3 +40,17 @@ float Animation::GetHeight() const
 {
 	return frames[0].GetHeight();
 }
+
+void Animation::OnResetDevice()
+{
+	for (Frame& f : frames) {
+		f.OnResetDevice();
+	}
+}
+
+void Animation::OnLostDevice()
+{
+	for (Frame& f : frames) {
+		f.OnLostDevice();
+	}
+}

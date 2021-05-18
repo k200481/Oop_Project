@@ -46,6 +46,11 @@ public:
 		return state == State::Jumping;
 	}
 
+	// gotta override these
+
+	void OnResetDevice() override;
+	void OnLostDevice() override;
+
 private:
 	void UpdateStateAndDirection(const Vec2& v);
 private:

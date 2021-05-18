@@ -26,6 +26,11 @@ public:
 	// get the ship's position
 	Vec2 GetPosition() const;
 
+	// gotta override these
+
+	void OnResetDevice() override;
+	void OnLostDevice() override;
+
 private:
 	// ship gets stuck at the wall without this
 	bool isCollidingWithWall = false;

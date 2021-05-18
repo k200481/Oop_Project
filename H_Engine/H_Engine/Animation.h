@@ -62,6 +62,12 @@ private:
 		float GetHeight() const {
 			return image.getHeight() * image.getScale();
 		}
+		void OnResetDevice() {
+			texManager.onResetDevice();
+		}
+		void OnLostDevice() {
+			texManager.onLostDevice();
+		}
 	private:
 		TextureManager texManager;
 		Image image;
@@ -78,6 +84,10 @@ public:
 	float GetWidth() const;
 	// get the height of sprie post-scaling
 	float GetHeight() const;
+
+	void OnResetDevice();
+	void OnLostDevice();
+
 private:
 	// vector of frames
 	std::vector<Frame> frames;
