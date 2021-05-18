@@ -40,7 +40,7 @@ protected:
 	// get rect to detect collisions
 	_Rect GetRect() const;
 	// update position based on current velocity
-	void UpdatePosition(float deltatime);
+	virtual void UpdatePosition(float deltatime);
 
 	// getters and setters
 	// get current position

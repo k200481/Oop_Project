@@ -1,10 +1,14 @@
 #pragma once
 
 #include "BasicEntity.h"
+#include "Projectile.h"
 #include "Animation.h"
 #include "Vec2.h"
 
-class Bullet : public BasicEntity
+// bullet was originally just a basic entity, but I've updated it to be a Projectile, it makes more sense
+	// also the physics of the bullet should be more interesting now, as it can acceleate
+
+class Bullet : public Projectile
 {
 public:
 	//constructor
@@ -38,5 +42,8 @@ private:
 	static const std::vector<LPCWSTR> file;
 	const float degrees = 270.0f;
 	const float imageScale = 1.0f;
-	Animation animation;
+	Animation animation; 
+	// i just realized this is very inefficient since each bullet instance will 
+	// have it's own version of animation, it's own frames, etc... all of which are identical
+	// but with the way the animation class works, it's unavoidable
 };
