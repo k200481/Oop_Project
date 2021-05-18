@@ -1,13 +1,19 @@
 #pragma once
 
 #include "BasicEntity.h"
+#include "Projectile.h"
 #include "Animation.h"
 
 #include "Vec2.h"
 #include <vector>
 
-class Ninja : public BasicEntity
+class Ninja : public Projectile
 {
+	// Okay... this needs some justification
+	// 	   it feels weird to call a Ninja a projectile
+	// 	   but basically, within the context of this game, a projectile 
+	// 	   is just a BasicEntity that experiences projectile motion.
+	// 	   Which... makes Ninja a projectile...
 private:
 	enum class State {
 		Running,
@@ -30,7 +36,7 @@ public:
 	// override to also consider jumping
 	bool ProcessWallCollision(const _Rect& walls) override;
 	// 
-	void Jump();
+	void Jump(float vertical_velocity);
 
 	// draw sprite
 	void Draw();
@@ -40,7 +46,11 @@ public:
 	// get velocity
 	Vec2 GetVelocity() const;
 	// set velocity
-	void SetVelocity(const Vec2& new_velocity);
+	void SetVelocity(const Vec2& new_velocity) override;
+	// only change the x value of velocity
+	void SetVelocityX(float new_vx);
+	// only change the y value of velocity
+	void SetVelocityY(float new_vy);
 	// check if ninja is in mid-air
 	bool IsInAir() {
 		return state == State::Jumping;
@@ -52,7 +62,15 @@ public:
 	void OnLostDevice() override;
 
 private:
+	// for updating which animation get's shown on screen
+	// overall
 	void UpdateStateAndDirection(const Vec2& v);
+	// handle the x part
+	void HandleVelocityX(float deltaV_x);
+	// handle the y part
+	// this one also uses the current velocity
+	void HandleVelocityY(float deltaV_y);
+
 private:
 	State state = State::Idle;
 	Animation::Direction direction = Animation::Direction::Right;

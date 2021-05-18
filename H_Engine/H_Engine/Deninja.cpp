@@ -50,8 +50,12 @@ void Deninja::update()
 
     // calculate the player's velocity based on user input
     Vec2 vel = { 0,0 };
-    const float movementSpeed = 300.0f;
-    const float jumpSpeedVertical = movementSpeed * 4;
+    // maxumum human running speed = 12.5 ms-1
+    const float movementSpeed = 572.5f;
+    // human juming initial velocity = 2.7 ms-1
+    // this guy is superhuman, so... 10 ms-1
+    const float jumpSpeed = 458.0f;
+    // see projectile.h for details
 
     if (input->isKeyDown('D')) {
         vel.x += movementSpeed;
@@ -59,20 +63,23 @@ void Deninja::update()
     else if (input->isKeyDown('A')) {
         vel.x -= movementSpeed;
     }
-    if (input->wasKeyPressed('W')) {
+
+    if (input->isKeyDown('W')) {
         if (!ninja->IsInAir()) {
-            vel.y -= jumpSpeedVertical;
+            ninja->Jump(jumpSpeed);
         }
     }
 
-    if (ninja->IsInAir()) {
-        vel.x /= movementSpeed;
-        vel.y += jumpSpeedVertical / 100;
-        ninja->UpdateVelocity(vel);
-    }
-    else {
+    if (!ninja->IsInAir()) {
         ninja->SetVelocity(vel);
     }
+
+    if (input->getMouseLButton()) {
+        const float x = input->getMouseX();
+        const float y = input->getMouseY();
+        bullets.push_back(new Bullet({ x, y }, { 0.0f, 0.0f }, graphics));
+    }
+
     ninja->Update(deltatime);
 }
 
