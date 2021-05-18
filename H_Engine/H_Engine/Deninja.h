@@ -11,6 +11,8 @@
 #include "Bullet.h"
 #include "Timer.h"
 
+#include <vector>
+
 class Deninja :public Game
 {
 private:
@@ -20,6 +22,7 @@ private:
     //
     Ninja* ninja = NULL;
     Ship* ship = NULL;
+    std::vector<Bullet*> bullets;
 
     // isn't really animated, but there's room for it to be
     // could also make a new class to handle 'scenes' with several animations
