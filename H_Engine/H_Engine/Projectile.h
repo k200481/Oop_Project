@@ -5,9 +5,38 @@
 class Projectile : public BasicEntity
 {
 public:
-	// for use in cases where non-projectiles experience projectile motion
-	static float GetDownwardAcceleration() {
-		return DownwardAcceleration;
+	// overriding process wall collisions
+	// assuming perfectly elastic collisions
+	bool ProcessWallCollision(const _Rect& walls) override {
+		
+		const _Rect rect = GetRect();
+		// left or right collision
+		if (rect.left < walls.left || rect.right > walls.right) {
+			ReboundX();
+		}
+		// top collision
+		if (rect.top < walls.top) {
+			ReboundY();
+		}
+		// bottom collision
+		if (rect.bottom > walls.bottom) {
+			// for this game, bottom collision just means zero vel, 
+			// because otherwise I'd ave to account for the gradual 
+			// loss of energy over time so projectile don't keep 
+			// bouncing for eternity... which is, frankly, yuck
+			// or.... I might decide to do it later, just cause
+			SetVelocity({ GetVelocity().x, 0.0f });
+		}
+		return BasicEntity::ProcessWallCollision(walls);
+	}
+
+	void ReboundX() {
+		const Vec2 vel = GetVelocity();
+		SetVelocity({ -vel.x, vel.y });
+	}
+	void ReboundY() {
+		const Vec2 vel = GetVelocity();
+		SetVelocity({ vel.x, -vel.y });
 	}
 
 protected:
@@ -16,6 +45,7 @@ protected:
 		:
 		BasicEntity(position, velocity)
 	{}
+	// JUST AN ESTIMATION of projectile motion
 	void UpdatePosition(float deltatime) override {
 		// initial position
 		const Vec2 pos = GetPosition();
@@ -34,7 +64,6 @@ protected:
 		// new position is the original position + delta_position
 		BasicEntity::SetPosition(pos + Vec2(dx, dy));
 	}
-
 private:
 	// pixels / sec^2
 	static constexpr float DownwardAcceleration = 100.0f;
