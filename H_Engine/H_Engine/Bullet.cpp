@@ -36,6 +36,16 @@ Vec2 Bullet::GetPosition() const
 	return BasicEntity::GetPosition();
 }
 
+void Bullet::OnResetDevice()
+{
+	animation.OnResetDevice();
+}
+
+void Bullet::OnLostDevice()
+{
+	animation.OnLostDevice();
+}
+
 void Bullet::BulletDestroyed() 
 {
 	isDestroyed = true;

@@ -78,20 +78,18 @@ void Deninja::collisions()
 
 void Deninja::releaseAll()
 {
-//    Bgmanager.onLostDevice();
-    for (int x = 0; x < 11; x++) {
-//        runmanager[x].onLostDevice();
-    }
+    background->OnLostDevice();
+    ship->OnLostDevice();
+    ninja->OnLostDevice();
     Game::releaseAll();
     return;
 }
 
 void Deninja::resetAll()
 {
-//    Bgmanager.onResetDevice();
-    for (int x = 0; x < 11; x++) {
-//       runmanager[x].onResetDevice();
-    }
+    background->OnResetDevice();
+    ship->OnResetDevice();
+    ninja->OnResetDevice();
     Game::resetAll();
     return;
 }

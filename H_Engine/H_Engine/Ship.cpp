@@ -61,3 +61,13 @@ Vec2 Ship::GetPosition() const
 	return BasicEntity::GetPosition();
 }
 
+void Ship::OnResetDevice()
+{
+	animation.OnResetDevice();
+}
+
+void Ship::OnLostDevice()
+{
+	animation.OnLostDevice();
+}
+

@@ -92,6 +92,20 @@ void Ninja::SetVelocity(const Vec2& new_velocity)
 	UpdateStateAndDirection(new_velocity);
 }
 
+void Ninja::OnResetDevice()
+{
+	for (Animation& a : animations) {
+		a.OnResetDevice();
+	}
+}
+
+void Ninja::OnLostDevice()
+{
+	for (Animation& a : animations) {
+		a.OnLostDevice();
+	}
+}
+
 void Ninja::UpdateStateAndDirection(const Vec2& v)
 {
 	if (v.y != 0) {
