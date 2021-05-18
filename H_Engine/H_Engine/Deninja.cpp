@@ -15,8 +15,6 @@ void Deninja::initialize(HWND hwnd) {
     ship = new Ship(100.0f, 100.0f, graphics);
     ninja = new Ninja(0.0f, 800.0f, graphics);
 
-    ninja->Jump();
-
     Bgmanager.initialize(graphics, L"BG.png");
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
 
@@ -34,7 +32,8 @@ void Deninja::update() {
 
     // calculate the player's velocity based on user input
     Vec2 vel = { 0,0 };
-    const float movementSpeed = 100.0f;
+    const float movementSpeed = 300.0f;
+    const float jumpSpeedVertical = movementSpeed * 4;
 
     if (input->isKeyDown('D')) {
         vel.x += movementSpeed;
@@ -44,13 +43,13 @@ void Deninja::update() {
     }
     if (input->wasKeyPressed('W')) {
         if (!ninja->IsInAir()) {
-            vel.y = -500.0f;
+            vel.y -= jumpSpeedVertical;
         }
     }
 
     if (ninja->IsInAir()) {
-        vel.x /= 100.0f;
-        vel.y += 10.0f;
+        vel.x /= movementSpeed;
+        vel.y += jumpSpeedVertical / 100;
         ninja->UpdateVelocity(vel);
     }
     else {
