@@ -4,23 +4,23 @@
 #include"image.h"
 #include"textureManager.h"
 
-
 #include "Vec2.h"
+#include "_Rect.h"
 #include "Ninja.h"
 #include "Ship.h"
 #include "Bullet.h"
+#include "Timer.h"
 
 class Deninja :public Game
 {
 private:
-    Bullet* b = NULL;
+    Timer timer;
+    
     Ninja* ninja = NULL;
     Ship* ship = NULL;
 
     TextureManager Bgmanager;
 	Image Bg;
-    
-
 
     int score = 0;
 public:
