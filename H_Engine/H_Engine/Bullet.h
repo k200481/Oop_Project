@@ -20,7 +20,7 @@ public:
 	bool ProcessWallCollision(const _Rect& walls) override;
 
 	// used to destroy bullet
-	void BulletDestroyed();
+	void SetDestroyed();
 	// returns true if bullet has been destroyed
 	bool IsDestroyed() const;
 	// draws bullet depending on its position

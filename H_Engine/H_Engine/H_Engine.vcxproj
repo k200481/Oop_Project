@@ -29,6 +29,7 @@
     <ClInclude Include="graphics.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Kunai.h" />
     <ClInclude Include="Ninja.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Ship.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Kunai.cpp" />
     <ClCompile Include="Ninja.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Ship.cpp" />
