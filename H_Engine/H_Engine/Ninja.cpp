@@ -1,4 +1,6 @@
 #include "Ninja.h"
+#include <math.h>
+#include <assert.h>
 
 const std::vector<LPCWSTR> Ninja::run_files = {
 	L"Run__000.png",
@@ -24,7 +26,7 @@ Ninja::Ninja(float initial_x, float initial_y, Graphics* graphics)
 
 Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 	:
-	BasicEntity(initial_position)
+	Projectile(initial_position)
 {
 	// running
 	animations.push_back( Animation( graphics, run_files, imageScale ) );
@@ -40,7 +42,7 @@ Ninja::Ninja(const Vec2& initial_position, Graphics* graphics)
 
 void Ninja::Update(float deltatime)
 {
-	BasicEntity::UpdatePosition(deltatime);
+	UpdatePosition(deltatime);
 	animations[int(state)].Advance(deltatime);
 }
 
@@ -48,27 +50,27 @@ void Ninja::UpdateVelocity(const Vec2& delta_velocity)
 {
 	// update velocity
 	SetVelocity(GetVelocity() + delta_velocity);
-	UpdateStateAndDirection(delta_velocity);
 }
 
 bool Ninja::ProcessWallCollision(const _Rect& walls)
 {
-	const _Rect& rect = GetRect();
-
-	if (int(rect.bottom) >= int(walls.bottom)) {
-		Vec2 vel = GetVelocity();
-		vel.y = 0.0f;
-		SetVelocity(vel);
-	}
-
-	return BasicEntity::ProcessWallCollision(walls);
+	return Projectile::ProcessWallCollision(walls);
 }
 
-void Ninja::Jump()
+void Ninja::Jump(float vertical_velocity)
 {
-	if (!IsInAir()) {
-		SetVelocity(Vec2(0.0f, -400.0f));
+	Vec2 v;
+	if (state == State::Running) {
+		if (direction == Animation::Direction::Right) {
+			v.x = 1.0f;
+		}
+		else {
+			v.x = -1.0f;
+		}
 	}
+	v.y = -3.0f;
+	v = v.UnitVector() * vertical_velocity;
+	SetVelocity(v);
 }
 
 void Ninja::Draw()
@@ -92,6 +94,16 @@ void Ninja::SetVelocity(const Vec2& new_velocity)
 	UpdateStateAndDirection(new_velocity);
 }
 
+void Ninja::SetVelocityX(float new_vx)
+{
+	SetVelocity({ new_vx, GetVelocity().y });
+}
+
+void Ninja::SetVelocityY(float new_vy)
+{
+	SetVelocity({ GetVelocity().x, new_vy });
+}
+
 void Ninja::OnResetDevice()
 {
 	for (Animation& a : animations) {
@@ -108,24 +120,37 @@ void Ninja::OnLostDevice()
 
 void Ninja::UpdateStateAndDirection(const Vec2& v)
 {
-	if (v.y != 0) {
-		// jumping
-		state = State::Jumping;
-	}
-	else if (v.x != 0.0f) {
-		// running
-		state = State::Running;
-	}
-	else {
-		// idle
+	HandleVelocityX(v.x);
+	// y is called later, and is thus dominant on the state
+	HandleVelocityY(v.y);
+}
+
+void Ninja::HandleVelocityX(float deltaV_x)
+{
+	// decide state
+	// relies on both current and delta v
+	if (deltaV_x == 0 && GetVelocity().x == 0) {
 		state = State::Idle;
 	}
+	else {
+		state = State::Running;
+	}
 
-	if (v.x > 0) {
+	// decide direction
+	// relies only on delta v
+	// remains same if no change
+	if (deltaV_x > 0.0f) {
 		direction = Animation::Direction::Right;
 	}
-	else if (v.x < 0) {
+	else if (deltaV_x < 0.0f) {
 		direction = Animation::Direction::Left;
 	}
-	// else retain previous direction
+}
+
+void Ninja::HandleVelocityY(float deltaV_y)
+{
+	// if there is any vertical velocity, ninja is in air, which'll count as jumping
+	if (deltaV_y != 0.0f || GetVelocity().y != 0.0f) {
+		state = State::Jumping;
+	}
 }

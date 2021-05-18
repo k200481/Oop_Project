@@ -66,7 +66,13 @@ protected:
 	}
 private:
 	// pixels / sec^2
-	static constexpr float DownwardAcceleration = 100.0f;
+	static constexpr float DownwardAcceleration = 450.0f;
 	const Vec2 DownwardAccelerationVec = {0.0f, DownwardAcceleration};
 };
 
+// some info for later
+// assumptions made for the physics:
+//	The ninja is 2 meters tall
+//	that makes, 1 meter = 45.8 pixels
+//	downward acceleration is then 9.81m / s^2 ~ 450 pixels / s^2
+//
