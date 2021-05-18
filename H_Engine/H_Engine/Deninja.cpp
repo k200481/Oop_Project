@@ -4,12 +4,14 @@ Deninja::Deninja()
 {
 }
 
-Deninja::~Deninja() {
+Deninja::~Deninja()
+{
     SAFE_DELETE(ninja);
     SAFE_DELETE(ship);
 }
 
-void Deninja::initialize(HWND hwnd) {
+void Deninja::initialize(HWND hwnd) 
+{
 	Game::initialize(hwnd);
 
     ship = new Ship(100.0f, 100.0f, graphics);
@@ -18,13 +20,15 @@ void Deninja::initialize(HWND hwnd) {
     Bgmanager.initialize(graphics, L"BG.png");
     Bg.initialize(graphics, 0, 0, 0, &Bgmanager);
 
+    ship->SetVelocity(Vec2(400.0f, 0.0f));
 }
 
-void Deninja::update() {
+void Deninja::update() 
+{
     // get the time that has passed since the previous frame
     const float deltatime = timer.Mark();
 
-    // update Ship's position
+    // update ship's position
     ship->Update(deltatime);
 
     // see if ship can fire a new bullet and do so if it can
@@ -58,14 +62,19 @@ void Deninja::update() {
     ninja->Update(deltatime);
 }
 
-void Deninja::ai(){}
+void Deninja::ai()
+{
+}
+
 void Deninja::collisions()
 {
     const _Rect walls(Vec2(0, 0), GAME_WIDTH, GAME_HEIGHT-100u);
 
     ninja->ProcessWallCollision(walls);
+    ship->ProcessWallCollision(walls);
 
 }
+
 void Deninja::releaseAll()
 {
     Bgmanager.onLostDevice();
@@ -75,6 +84,7 @@ void Deninja::releaseAll()
     Game::releaseAll();
     return;
 }
+
 void Deninja::resetAll()
 {
     Bgmanager.onResetDevice();
