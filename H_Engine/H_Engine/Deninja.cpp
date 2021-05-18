@@ -76,8 +76,8 @@ void Deninja::update()
 
     if (input->getMouseLButton()) {
         if (ninja->CanFire()) {
-            const float targetX = input->getMouseX();
-            const float targetY = input->getMouseY();
+            const float targetX = (float) input->getMouseX();
+            const float targetY = (float) input->getMouseY();
             kunai.Add(ninja->Fire(Vec2{targetX, targetY}));
         }
     }

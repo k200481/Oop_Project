@@ -32,6 +32,9 @@ public:
 		int count = 0;
 		for (Projectile* p : projectiles) {
 			if (p->DetectEntityCollision(entity)) {
+				// might just make a virtual 'ProcessEntityCollisions' function
+				// instead of hardcoding what happens to the projectile here
+				p->SetDestroyed();
 				t(entity);
 				count++;
 			}
