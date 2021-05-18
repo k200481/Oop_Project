@@ -39,21 +39,15 @@ public:
 		SetVelocity({ vel.x, -vel.y });
 	}
 
-protected:
-	// protected constructors, although though it's not necessary
-	Projectile(const Vec2& position = { 0.0f, 0.0f }, const Vec2& velocity = { 0.0f, 0.0f })
-		:
-		BasicEntity(position, velocity)
-	{}
 	// JUST AN ESTIMATION of projectile motion
-	void UpdatePosition(float deltatime) override {
+	void Update(float deltatime) override {
 		// initial position
 		const Vec2 pos = GetPosition();
 		// initial velocity
 		const Vec2 u = GetVelocity();
 		// final velocity
 		const Vec2 v = u + (DownwardAccelerationVec * deltatime);
-		
+
 		// x increases normally
 		const float dx = u.x * deltatime;
 		// s = ut + 0.5 at^2
@@ -64,6 +58,14 @@ protected:
 		// new position is the original position + delta_position
 		BasicEntity::SetPosition(pos + Vec2(dx, dy));
 	}
+
+protected:
+	// protected constructor, although though it's not necessary
+	Projectile(const Vec2& position = { 0.0f, 0.0f }, const Vec2& velocity = { 0.0f, 0.0f })
+		:
+		BasicEntity(position, velocity)
+	{}
+	
 private:
 	// pixels / sec^2
 	static constexpr float DownwardAcceleration = 450.0f;

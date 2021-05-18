@@ -12,10 +12,10 @@ Deninja::~Deninja()
     SAFE_DELETE(ship);
     SAFE_DELETE(background);
 
-    for (Bullet* b : bullets) {
+    for (Projectile* b : bullets) {
         delete b;
     }
-    for (Kunai* k : kunai) {
+    for (Projectile* k : kunai) {
         delete k;
     }
 }
@@ -26,7 +26,6 @@ void Deninja::initialize(HWND hwnd)
 
     ship = new Ship(100.0f, 100.0f, graphics);
     ninja = new Ninja(0.0f, 800.0f, graphics);
-    kunai.push_back(new Kunai({ 100, 100 }, { 0, 0 }, graphics));
     // just making a vector on the go
     background = new Animation(graphics, std::vector<LPCWSTR>({L"BG.png"}), 1.0f);
 
@@ -47,10 +46,10 @@ void Deninja::update()
     }
 
     // update the positions of all the bullets
-    for (Bullet* b : bullets) {
+    for (Projectile* b : bullets) {
         b->Update(deltatime);
     }
-    for (Kunai* k : kunai) {
+    for (Projectile* k : kunai) {
         k->Update(deltatime);
     }
 
@@ -81,13 +80,11 @@ void Deninja::update()
     }
 
     if (input->getMouseLButton()) {
-        const Vec2 nPos = ninja->GetCenter();
-        Vec2 tPos;
-        tPos.x = (float) input->getMouseX();
-        tPos.y = (float) input->getMouseY();
-        const Vec2 direction = tPos - nPos;
-
-        kunai.push_back(new Kunai(nPos, direction.UnitVector() * 1000.0f, graphics));
+        if (ninja->CanFire()) {
+            const float targetX = input->getMouseX();
+            const float targetY = input->getMouseY();
+            kunai.push_back(ninja->Fire(Vec2{targetX, targetY}));
+        }
     }
 
     ninja->Update(deltatime);
@@ -105,22 +102,22 @@ void Deninja::collisions()
     ship->ProcessWallCollision(walls);
     
     // process all wall collisions
-    for (Bullet* b : bullets) {
+    for (Projectile* b : bullets) {
         b->ProcessWallCollision(walls);
     }
     // process all bullet collisions with ninja
-    for (Bullet* b : bullets) {
+    for (Projectile* b : bullets) {
         if (b->DetectEntityCollision(*ninja)) {
             b->SetDestroyed();
         }
     }
 
     // remove any bullets that were destroyed from collisions
-    const std::vector<Bullet*>::const_iterator newEnd = std::remove_if(
+    const std::vector<Projectile*>::const_iterator newEnd = std::remove_if(
         // begin and end points
         bullets.begin(), bullets.end(),
         // lambda function to remove destroyed bullets
-        [](Bullet* b) {
+        [](Projectile* b) {
             if (b->IsDestroyed()) {
                 delete b;
                 b = NULL;
@@ -133,22 +130,22 @@ void Deninja::collisions()
     bullets.erase(newEnd, bullets.end());
 
     // process all wall collisions
-    for (Kunai* k : kunai) {
+    for (Projectile* k : kunai) {
         k->ProcessWallCollision(walls);
     }
     // process all kunai collisions with ship
-    for (Kunai* k : kunai) {
+    for (Projectile* k : kunai) {
         if (k->DetectEntityCollision(*ship)) {
             k->SetDestroyed();
         }
     }
 
     // remove any bullets that were destroyed from collisions
-    const std::vector<Kunai*>::const_iterator newEnd2 = std::remove_if(
+    const std::vector<Projectile*>::const_iterator newEnd2 = std::remove_if(
         // begin and end points
         kunai.begin(), kunai.end(),
         // lambda function to remove destroyed bullets
-        [](Kunai* k) {
+        [](Projectile* k) {
             if (k->IsDestroyed()) {
                 delete k;
                 k = NULL;
@@ -189,12 +186,12 @@ void Deninja::render()
     ninja->Draw();
 
     // render all bullets
-    for (Bullet* b : bullets) {
+    for (Projectile* b : bullets) {
         b->Draw();
     }
 
     // render all bullets
-    for (Kunai* k : kunai) {
+    for (Projectile* k : kunai) {
         k->Draw();
     }
 

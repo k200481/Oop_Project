@@ -2,6 +2,18 @@
 
 #include <assert.h>
 
+bool BasicEntity::IsDestroyed()
+{
+	return isDestoryed;
+}
+
+void BasicEntity::SetDestroyed()
+{
+	// should only be called when an entity hasn'r already been destroyed
+	assert(!IsDestroyed());
+	isDestoryed = true;
+}
+
 BasicEntity::BasicEntity()
 {
 }
@@ -27,7 +39,7 @@ _Rect BasicEntity::GetRect() const
 	return _Rect(position, width, height);
 }
 
-void BasicEntity::UpdatePosition(float deltatime)
+void BasicEntity::Update(float deltatime)
 {
 	position += velocity * deltatime;
 }

@@ -24,6 +24,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Deninja.h" />
+    <ClInclude Include="FiringManager.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameError.h" />
     <ClInclude Include="graphics.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="BasicEntity.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Deninja.cpp" />
+    <ClCompile Include="FiringManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />

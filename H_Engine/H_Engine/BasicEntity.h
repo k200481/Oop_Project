@@ -22,10 +22,25 @@ public:
 	// but they all DO have animations
 	// could also just make a local protected vector of animations, but... this is a BASIC entity
 	
+	// every basic entity will be draw-able
+	// cannot be implemented now because no Graphics*
+	virtual void Draw() = 0;
 	// must be implemented by every entity
 	virtual void OnResetDevice() = 0;
 	// must be implemented by every entity
 	virtual void OnLostDevice() = 0;
+
+	// every entity has some kind of lifespan (infinity still counts)
+	// said lifespan ends when sone condition is met, it can be hp, or a collision or anythin
+	
+	// check if an entity has been destroyed
+	bool IsDestroyed();
+	// mark an entity as destroyed
+	void SetDestroyed();
+
+	// to avoid memory leaks
+	virtual ~BasicEntity() {
+	}
 
 protected:
 	// constructors
@@ -40,7 +55,7 @@ protected:
 	// get rect to detect collisions
 	_Rect GetRect() const;
 	// update position based on current velocity
-	virtual void UpdatePosition(float deltatime);
+	virtual void Update(float deltatime);
 
 	// getters and setters
 	// get current position
@@ -59,9 +74,15 @@ protected:
 	float GetHeight();
 
 private:
+	// variable to track entity's current sttate
+	bool isDestoryed;
+	// position on screen
 	Vec2 position = {0.0f,0.0f};
+	// velocity
 	Vec2 velocity = { 0.0f,0.0f };
+	// width of sprite
 	float width = -1.0f;
+	// height of sprite
 	float height = -1.0f;
 };
 

@@ -21,7 +21,7 @@ Kunai::Kunai(const Vec2& position, const Vec2& velocity, Graphics* graphics)
 
 void Kunai::Update(float deltatime)
 {
-	UpdatePosition(deltatime);
+	Projectile::Update(deltatime);
 
 	// advancing animations is unnecessary with only one frame
 	// but it can be called in case more frames are ever added
@@ -38,11 +38,6 @@ bool Kunai::ProcessWallCollision(const _Rect& walls)
 	return Projectile::ProcessWallCollision(walls);
 }
 
-Vec2 Kunai::GetPosition() const
-{
-	return BasicEntity::GetPosition();
-}
-
 void Kunai::OnResetDevice()
 {
 	animation.OnResetDevice();
@@ -51,16 +46,6 @@ void Kunai::OnResetDevice()
 void Kunai::OnLostDevice()
 {
 	animation.OnLostDevice();
-}
-
-void Kunai::SetDestroyed()
-{
-	isDestroyed = true;
-}
-
-bool Kunai::IsDestroyed() const
-{
-	return isDestroyed;
 }
 
 void Kunai::Draw()
