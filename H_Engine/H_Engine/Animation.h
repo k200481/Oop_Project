@@ -9,7 +9,7 @@
 class Animation
 {
 public:
-	// for classes like the ninja which have a ditinct direction
+	// for classes like the ninja which are mirrored when facing left or right
 	enum class Direction {
 		Right,
 		Left
