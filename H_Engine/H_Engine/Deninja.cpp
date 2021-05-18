@@ -57,9 +57,6 @@ void Deninja::update() {
         ninja->SetVelocity(vel);
     }
     ninja->Update(deltatime);
-
-    // render everything
-    Deninja::render();
 }
 
 void Deninja::ai(){}
