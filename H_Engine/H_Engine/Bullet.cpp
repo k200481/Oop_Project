@@ -29,7 +29,7 @@ bool Bullet::ProcessWallCollision(const _Rect& walls)
 	// for now bullets get destroyed on any kind of collision instead
 	// of rebounding, might change that later
 	if (Projectile::ProcessWallCollision(walls)) {
-		BulletDestroyed();
+		SetDestroyed();
 	}
 	return true;
 }
@@ -49,7 +49,7 @@ void Bullet::OnLostDevice()
 	animation.OnLostDevice();
 }
 
-void Bullet::BulletDestroyed() 
+void Bullet::SetDestroyed() 
 {
 	isDestroyed = true;
 }

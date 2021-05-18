@@ -1,14 +1,13 @@
 #ifndef NINJA_H
 #define NINJA_H
 #include"game.h"
-#include"image.h"
-#include"textureManager.h"
 
 #include "Vec2.h"
 #include "_Rect.h"
 #include "Ninja.h"
 #include "Ship.h"
 #include "Bullet.h"
+#include "Kunai.h"
 #include "Timer.h"
 
 #include <vector>
@@ -23,6 +22,7 @@ private:
     Ninja* ninja = NULL;
     Ship* ship = NULL;
     std::vector<Bullet*> bullets;
+    std::vector<Kunai*> kunai;
 
     // isn't really animated, but there's room for it to be
     // could also make a new class to handle 'scenes' with several animations

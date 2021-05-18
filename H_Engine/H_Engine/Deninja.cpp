@@ -15,6 +15,9 @@ Deninja::~Deninja()
     for (Bullet* b : bullets) {
         delete b;
     }
+    for (Kunai* k : kunai) {
+        delete k;
+    }
 }
 
 void Deninja::initialize(HWND hwnd) 
@@ -23,7 +26,7 @@ void Deninja::initialize(HWND hwnd)
 
     ship = new Ship(100.0f, 100.0f, graphics);
     ninja = new Ninja(0.0f, 800.0f, graphics);
-
+    kunai.push_back(new Kunai({ 100, 100 }, { 0, 0 }, graphics));
     // just making a vector on the go
     background = new Animation(graphics, std::vector<LPCWSTR>({L"BG.png"}), 1.0f);
 
@@ -46,6 +49,9 @@ void Deninja::update()
     // update the positions of all the bullets
     for (Bullet* b : bullets) {
         b->Update(deltatime);
+    }
+    for (Kunai* k : kunai) {
+        k->Update(deltatime);
     }
 
     // calculate the player's velocity based on user input
@@ -75,9 +81,13 @@ void Deninja::update()
     }
 
     if (input->getMouseLButton()) {
-        const float x = input->getMouseX();
-        const float y = input->getMouseY();
-        bullets.push_back(new Bullet({ x, y }, { 0.0f, 0.0f }, graphics));
+        const Vec2 nPos = ninja->GetCenter();
+        Vec2 tPos;
+        tPos.x = (float) input->getMouseX();
+        tPos.y = (float) input->getMouseY();
+        const Vec2 direction = tPos - nPos;
+
+        kunai.push_back(new Kunai(nPos, direction.UnitVector() * 1000.0f, graphics));
     }
 
     ninja->Update(deltatime);
@@ -101,7 +111,7 @@ void Deninja::collisions()
     // process all bullet collisions with ninja
     for (Bullet* b : bullets) {
         if (b->DetectEntityCollision(*ninja)) {
-            b->BulletDestroyed();
+            b->SetDestroyed();
         }
     }
 
@@ -121,6 +131,34 @@ void Deninja::collisions()
     );
     // clear out the freed up space in the vector
     bullets.erase(newEnd, bullets.end());
+
+    // process all wall collisions
+    for (Kunai* k : kunai) {
+        k->ProcessWallCollision(walls);
+    }
+    // process all kunai collisions with ship
+    for (Kunai* k : kunai) {
+        if (k->DetectEntityCollision(*ship)) {
+            k->SetDestroyed();
+        }
+    }
+
+    // remove any bullets that were destroyed from collisions
+    const std::vector<Kunai*>::const_iterator newEnd2 = std::remove_if(
+        // begin and end points
+        kunai.begin(), kunai.end(),
+        // lambda function to remove destroyed bullets
+        [](Kunai* k) {
+            if (k->IsDestroyed()) {
+                delete k;
+                k = NULL;
+                return true;
+            }
+            return false;
+        }
+    );
+    // clear out the freed up space in the vector
+    kunai.erase(newEnd2, kunai.end());
 }
 
 void Deninja::releaseAll()
@@ -153,6 +191,11 @@ void Deninja::render()
     // render all bullets
     for (Bullet* b : bullets) {
         b->Draw();
+    }
+
+    // render all bullets
+    for (Kunai* k : kunai) {
+        k->Draw();
     }
 
     graphics->spriteEnd();
