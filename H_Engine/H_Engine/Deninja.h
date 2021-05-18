@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Kunai.h"
 #include "Timer.h"
+#include "ProjectileManager.h"
 
 #include <vector>
 
@@ -21,8 +22,8 @@ private:
     //
     Ninja* ninja = NULL;
     Ship* ship = NULL;
-    std::vector<Projectile*> bullets;
-    std::vector<Projectile*> kunai;
+    ProjectileManager bullets;
+    ProjectileManager kunai;
 
     // isn't really animated, but there's room for it to be
     // could also make a new class to handle 'scenes' with several animations
@@ -30,6 +31,7 @@ private:
     Animation* background = NULL;
 
     int score = 0;
+    bool gameOver = false;
 public:
     Deninja();
     virtual ~Deninja();

@@ -33,6 +33,7 @@
     <ClInclude Include="Kunai.h" />
     <ClInclude Include="Ninja.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="Timer.h" />
@@ -53,6 +54,7 @@
     <ClCompile Include="Kunai.cpp" />
     <ClCompile Include="Ninja.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
