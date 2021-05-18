@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include <assert.h>
 
 const std::vector<LPCWSTR> Bullet::file = {
 	L"bullet.png"
@@ -6,7 +7,7 @@ const std::vector<LPCWSTR> Bullet::file = {
 
 Bullet::Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics)
 	:
-	BasicEntity(position, velocity),
+	Projectile(position, velocity),
 	animation(graphics, file, imageScale, degrees)
 {
 	// flipped because the image is horizontal but the bullet falls vertically
@@ -16,7 +17,7 @@ Bullet::Bullet(const Vec2& position, const Vec2& velocity, Graphics* graphics)
 
 void Bullet::Update(float deltatime) 
 {
-	BasicEntity::UpdatePosition(deltatime);
+	UpdatePosition(deltatime);
 
 	// advancing animations is unnecessary with only one frame
 	// but it can be called in case more frames are ever added
@@ -58,7 +59,6 @@ bool Bullet::IsDestroyed() const
 
 void Bullet::Draw()
 {
-	if (!IsDestroyed()) {
-		animation.Draw(GetPosition());
-	}
+	assert(!IsDestroyed());
+	animation.Draw(GetPosition());
 }
