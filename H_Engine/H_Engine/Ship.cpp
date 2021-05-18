@@ -16,47 +16,48 @@ Ship::Ship(float initial_x, float initial_y, Graphics* graphics)
 
 Ship::Ship(const Vec2& initial_position, Graphics* graphics)
 	:
-	position(initial_position),
+	BasicEntity(initial_position),
 	animation(graphics, files, imageScale)
 {
+	SetWidth(animation.GetWidth());
+	SetHeight(animation.GetHeight());
 }
 
 void Ship::Update(float deltatime)
 {
 	// update position
-	position += direction * movementSpeed * deltatime;
+	BasicEntity::UpdatePosition(deltatime);
 	// pass deltatime to animation
 	animation.Advance(deltatime);
 }
 
 void Ship::Draw()
 {
-	animation.Draw(position);
+	animation.Draw(GetPosition());
+}
+
+bool Ship::ProcessWallCollision(const _Rect& walls)
+{
+	_Rect rect = GetRect();
+	if (rect.right >= walls.right || rect.left <= walls.left) {
+		if (!isCollidingWithWall) {
+			SetVelocity(GetVelocity() * -1);
+			isCollidingWithWall = true;
+		}
+	}
+	else {
+		isCollidingWithWall = false;
+	}
+	return BasicEntity::ProcessWallCollision(walls);
 }
 
 void Ship::SetVelocity(const Vec2& new_velocity)
 {
-	direction = new_velocity.UnitVector();
-	movementSpeed = float(new_velocity.Magnitude());
-}
-
-void Ship::SetDirection(const Vec2& new_direction)
-{
-	direction = new_direction.UnitVector();
+	BasicEntity::SetVelocity(new_velocity);
 }
 
 Vec2 Ship::GetPosition() const
 {
-	return position;
-}
-
-Vec2 Ship::GetDirection() const
-{
-	return direction;
-}
-
-float Ship::GetMovementSpeed() const
-{
-	return movementSpeed;
+	return BasicEntity::GetPosition();
 }
 
